@@ -16,6 +16,7 @@ CSV는 다음 컬럼을 가져야 합니다:
 
 import json
 import sys
+from pathlib import Path
 
 # Windows 터미널(cp949)에서 한글이 깨지지 않도록 출력 인코딩을 UTF-8로 고정
 try:
@@ -27,7 +28,10 @@ import pandas as pd
 
 from modules.risk_engine import RiskEngine
 
-CONFIG_PATH = "config/risk_thresholds.yaml"
+# config 경로는 실행 위치가 아니라 이 파일 위치를 기준으로 잡는다
+# (어느 디렉토리에서 실행해도 동작하도록)
+BASE_DIR = Path(__file__).resolve().parent
+CONFIG_PATH = str(BASE_DIR / "config" / "risk_thresholds.yaml")
 
 
 def main():

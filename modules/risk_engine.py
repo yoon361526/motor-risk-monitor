@@ -31,6 +31,25 @@ SENSOR_KR = {
     "rpm": "RPM",
 }
 
+# 입력 CSV에 반드시 있어야 하는 컬럼 (fault_type은 라벨이라 필수 아님)
+REQUIRED_COLUMNS = [
+    "timestamp",
+    "operating_time_sec",
+    "temperature_c",
+    "vibration_g",
+    "current_a",
+    "rpm",
+]
+
+# 검증에 쓰는 숫자형 컬럼
+NUMERIC_COLUMNS = [
+    "operating_time_sec",
+    "temperature_c",
+    "vibration_g",
+    "current_a",
+    "rpm",
+]
+
 
 class RiskEngine:
     """규칙 기반 모터 위험 점수 산출 엔진."""
@@ -49,6 +68,64 @@ class RiskEngine:
             self.config: Dict[str, Any] = yaml.safe_load(f)
 
         self.equipment: str = self.config.get("equipment", "Motor")
+
+    # ------------------------------------------------------------------
+    # 0. 입력 CSV 검증
+    # ------------------------------------------------------------------
+    def validate_input(self, df: pd.DataFrame) -> List[str]:
+        """
+        입력 DataFrame의 유효성을 검사한다.
+          - 치명적 문제(컬럼 누락/타입 오류/결측치/행 부족)는 ValueError로 즉시 중단.
+          - 진단은 가능하지만 주의가 필요한 사항은 경고 리스트로 반환.
+        반환: 경고 메시지 리스트(data_quality_warnings 로 결과에 포함).
+        """
+        warnings: List[str] = []
+
+        # 1) 필수 컬럼 존재
+        missing = [c for c in REQUIRED_COLUMNS if c not in df.columns]
+        if missing:
+            raise ValueError(f"필수 컬럼이 누락되었습니다: {missing}")
+
+        # 2) 최소 행 수 (baseline 20%가 의미를 가지려면 최소한의 표본 필요)
+        if len(df) < 50:
+            raise ValueError(
+                f"데이터 행 수가 너무 적습니다({len(df)}행). 최소 50행 이상이 필요합니다."
+            )
+
+        # 3) 숫자형 컬럼 타입
+        for col in NUMERIC_COLUMNS:
+            if not pd.api.types.is_numeric_dtype(df[col]):
+                raise ValueError(f"'{col}' 컬럼은 숫자형이어야 합니다.")
+
+        # 4) 결측치
+        if df[NUMERIC_COLUMNS].isna().any().any():
+            raise ValueError("센서 데이터에 결측치(NaN)가 포함되어 있습니다.")
+
+        # --- 여기부터는 경고(중단하지 않음) ---
+        # 5) RPM 음수 등 비정상 값
+        if (df["rpm"] < 0).any():
+            warnings.append("RPM에 음수 값이 포함되어 있습니다.")
+
+        # 6) baseline 구간이 0/음수 평균이면 변화율 계산이 왜곡됨
+        ratio = self.config["baseline"]["baseline_ratio"]
+        base_len = max(1, int(round(len(df) * ratio)))
+        for sensor, col in (("temperature", "temperature_c"),
+                            ("current", "current_a"),
+                            ("rpm", "rpm")):
+            base_mean = float(df[col].iloc[:base_len].mean())
+            if base_mean <= 0:
+                warnings.append(
+                    f"{SENSOR_KR[sensor]} baseline 평균이 0 이하({base_mean:.3f})라 "
+                    f"변화율 계산이 부정확할 수 있습니다."
+                )
+
+        # 7) 시간 컬럼 정렬 여부
+        if not df["operating_time_sec"].is_monotonic_increasing:
+            warnings.append(
+                "operating_time_sec가 오름차순으로 정렬되어 있지 않습니다."
+            )
+
+        return warnings
 
     # ------------------------------------------------------------------
     # 1. baseline: 초기 20% 구간 평균/표준편차
@@ -207,6 +284,8 @@ class RiskEngine:
                     "description": pattern["description"],
                     "cause": pattern["cause"],
                     "bonus": float(pattern["bonus"]),
+                    # 이 패턴이 잡히면 최종 점수를 최소 이 값 이상으로 보장 (기본 0)
+                    "min_score_if_detected": float(pattern.get("min_score_if_detected", 0)),
                 })
         return detected
 
@@ -216,7 +295,13 @@ class RiskEngine:
     def compute_final_score(self, scores: Dict[str, float],
                             detected_patterns: List[Dict[str, Any]]) -> float:
         """
-        Final = Σ(sensor_score * weight) + Σ(pattern_bonus)  를 0~100으로 clip.
+        Final = max( Σ(sensor_score * weight) + Σ(pattern_bonus),
+                     탐지된 패턴의 최소 보장 점수 ) 를 0~100으로 clip.
+
+        ★ 최소 보장 점수(min_score_if_detected)를 두는 이유:
+          냉각 불량처럼 단일 센서(온도)만 오르는 고장은 가중합이 낮게 나와
+          '정상'으로 분류될 수 있다. 명백한 고장 패턴이 탐지됐는데 정상으로
+          나오는 모순을 막기 위해, 패턴이 잡히면 최소 점수를 바닥으로 깐다.
         """
         w = self.config["weights"]
         weighted = (
@@ -226,7 +311,14 @@ class RiskEngine:
             + scores["rpm"] * w["rpm"]
         )
         pattern_bonus = sum(p["bonus"] for p in detected_patterns)
-        final = weighted + pattern_bonus
+
+        # 탐지된 패턴들의 최소 보장 점수 중 가장 큰 값
+        pattern_min = max(
+            (p.get("min_score_if_detected", 0.0) for p in detected_patterns),
+            default=0.0,
+        )
+
+        final = max(weighted + pattern_bonus, pattern_min)
         return float(np.clip(final, 0.0, 100.0))
 
     # ------------------------------------------------------------------
@@ -272,6 +364,9 @@ class RiskEngine:
         중간 계산값(baseline, changes, scores, patterns)도 모두 포함해
         점수 산출 근거를 외부에서 검증할 수 있게 한다.
         """
+        # 0) 입력 검증 (치명적 문제는 여기서 ValueError로 중단됨)
+        data_quality_warnings = self.validate_input(df)
+
         baseline = self.compute_baseline(df)
         changes = self.compute_changes(df, baseline)
         scores = self.compute_sensor_scores(changes)
@@ -292,6 +387,19 @@ class RiskEngine:
             max(detected, key=lambda p: p["bonus"])["description"]
             if detected else "특이 조합 패턴 없음"
         )
+
+        # 분석 구간(초): baseline 구간과 분석 대상(후반부) 구간의 시간 범위
+        ot = df["operating_time_sec"].to_numpy()
+        base_len = baseline["baseline_rows"]
+        tail_ratio = self.config["baseline"]["analysis_tail_ratio"]
+        tail_len = max(1, int(round(len(df) * tail_ratio)))
+        analysis_window = {
+            "baseline_range_sec": f"{int(ot[0])}-{int(ot[base_len - 1])}",
+            "analysis_range_sec": f"{int(ot[-tail_len])}-{int(ot[-1])}",
+        }
+
+        # 점수 산출 근거를 자연어 문장으로 (AI 리포트 품질/설명 가능성 향상)
+        score_explanation = self._build_score_explanation(changes, scores, detected)
 
         result = {
             "equipment": self.equipment,
@@ -327,5 +435,45 @@ class RiskEngine:
             "main_pattern": main_pattern,
             "suspected_causes": causes["suspected_causes"],
             "recommended_checks": causes["recommended_checks"],
+            # --- 근거/설명 필드 (AI 리포트 및 설명 가능성용) ---
+            "analysis_window": analysis_window,
+            "score_explanation": score_explanation,
+            "data_quality_warnings": data_quality_warnings,
         }
         return result
+
+    # ------------------------------------------------------------------
+    # 보조: 점수 산출 근거를 자연어 문장 리스트로 생성
+    # ------------------------------------------------------------------
+    def _build_score_explanation(self, changes: Dict[str, float],
+                                 scores: Dict[str, float],
+                                 detected: List[Dict[str, Any]]) -> List[str]:
+        """왜 이런 점수가 나왔는지 사람이 읽을 수 있는 근거 문장을 만든다."""
+        # 센서별 변화율 키와 방향 표현
+        change_key = {"temperature": "temperature", "vibration": "vibration",
+                      "current": "current", "rpm": "rpm_drop"}
+        direction = {"temperature": "상승", "vibration": "증가",
+                     "current": "증가", "rpm": "감소"}
+
+        lines: List[str] = []
+        # 점수가 높은 센서부터 서술
+        for sensor in sorted(scores, key=lambda s: scores[s], reverse=True):
+            sc = scores[sensor]
+            if sc <= 0:
+                continue
+            ch = changes[change_key[sensor]]
+            lines.append(
+                f"{SENSOR_KR[sensor]}이(가) 기준 대비 {ch * 100:.1f}% "
+                f"{direction[sensor]}하여 {SENSOR_KR[sensor]} 점수 {sc:.1f}점"
+            )
+
+        # 탐지된 패턴별 보너스/최소 보장 설명
+        for p in detected:
+            note = f"'{p['label']}' 패턴 탐지 → 보너스 {p['bonus']:.0f}점"
+            if p.get("min_score_if_detected", 0):
+                note += f" (최소 보장 {p['min_score_if_detected']:.0f}점)"
+            lines.append(note)
+
+        if not lines:
+            lines.append("기준 대비 유의미한 센서 변화가 감지되지 않았습니다.")
+        return lines

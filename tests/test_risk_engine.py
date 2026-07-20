@@ -88,6 +88,12 @@ def make_cooling_fault():
                     cur=(10.0, 10.15), rpm=(1500, 1495), fault_type="cooling_fault")
 
 
+def make_complex_abnormal():
+    # 온도 + 진동 + 전류 동시 크게 증가 (복합 이상)
+    return _make_df(temp=(60, 70), vib=(0.20, 0.32),
+                    cur=(10.0, 13.0), rpm=(1500, 1495), fault_type="complex_abnormal")
+
+
 # ---------------------------------------------------------------------------
 # 테스트
 # ---------------------------------------------------------------------------
@@ -165,8 +171,71 @@ def test_analyze_output_schema(engine):
         "equipment", "status", "risk_score", "baseline", "sensor_changes",
         "sensor_scores", "detected_patterns", "abnormal_sensors",
         "main_pattern", "suspected_causes", "recommended_checks",
+        # 근거/설명 필드
+        "analysis_window", "score_explanation", "data_quality_warnings",
     }
     assert required_keys.issubset(result.keys())
+
+
+# ---------------------------------------------------------------------------
+# 상태 분류 검증 — "패턴이 잡혔는데 정상으로 분류되는 모순"이 없어야 한다
+# ---------------------------------------------------------------------------
+def test_overload_status_is_not_normal(engine):
+    """과부하 감지 시 상태가 정상이 아니어야 한다 (최소 40점)."""
+    result = engine.analyze(make_overload())
+    assert result["status"] in ("주의", "위험")
+    assert result["risk_score"] >= 40
+
+
+def test_bearing_wear_status_is_not_normal(engine):
+    """베어링 마모 감지 시 상태가 정상이 아니어야 한다."""
+    result = engine.analyze(make_bearing_wear())
+    assert result["status"] in ("주의", "위험")
+    assert result["risk_score"] >= 40
+
+
+def test_cooling_fault_status_is_not_normal(engine):
+    """냉각 불량(온도만 상승)도 최소 '주의'로 분류돼야 한다 (핵심 회귀 방지)."""
+    result = engine.analyze(make_cooling_fault())
+    assert result["status"] in ("주의", "위험")
+    assert result["risk_score"] >= 40
+
+
+def test_complex_abnormal_status_is_danger(engine):
+    """복합 이상 감지 시 상태가 '위험'이어야 한다 (최소 70점)."""
+    df = make_complex_abnormal()
+    keys = [p["key"] for p in engine.detect_patterns(
+        engine.compute_changes(df, engine.compute_baseline(df)))]
+    assert "compound_fault" in keys
+    result = engine.analyze(df)
+    assert result["status"] == "위험"
+    assert result["risk_score"] >= 70
+
+
+# ---------------------------------------------------------------------------
+# 입력 검증
+# ---------------------------------------------------------------------------
+def test_missing_required_column_raises_error(engine):
+    """필수 컬럼(rpm)이 빠지면 ValueError."""
+    df = make_normal().drop(columns=["rpm"])
+    with pytest.raises(ValueError):
+        engine.analyze(df)
+
+
+def test_too_few_rows_raises_error(engine):
+    """행 수가 너무 적으면 ValueError."""
+    df = make_normal().iloc[:10]
+    with pytest.raises(ValueError):
+        engine.analyze(df)
+
+
+def test_nan_in_sensor_raises_error(engine):
+    """센서에 결측치가 있으면 ValueError."""
+    import numpy as np
+    df = make_normal()
+    df.loc[5, "current_a"] = np.nan
+    with pytest.raises(ValueError):
+        engine.analyze(df)
 
 
 if __name__ == "__main__":

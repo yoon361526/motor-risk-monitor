@@ -56,6 +56,9 @@ sensor_score_mapping:
 # 4. 조합 패턴 탐지 조건 + 보너스 강도
 #    각 패턴은 변화율 임계값 조건을 모두 만족할 때 탐지된다.
 #    bonus: 탐지 시 최종 점수에 더해지는 값
+#    min_score_if_detected: 이 패턴이 탐지되면 최종 점수를 최소 이 값 이상으로 보장한다.
+#      (단일 센서 가중합이 낮아도, 명백한 고장 패턴이 잡혔는데 '정상'으로 분류되는
+#       모순을 막기 위함 — 예: 냉각 불량은 온도만 오르므로 가중합이 낮게 나온다)
 #    조건 키 의미:
 #       current_change_gte  : 전류 증가율 >= 값
 #       rpm_drop_gte        : RPM 감소율 >= 값
@@ -69,6 +72,7 @@ patterns:
     description: "전류 증가와 RPM 감소가 동시에 발생"
     cause: "과부하"
     bonus: 20
+    min_score_if_detected: 45
     conditions:
       current_change_gte: 0.10
       rpm_drop_gte: 0.05
@@ -78,6 +82,7 @@ patterns:
     description: "진동 증가와 온도 상승이 동시에 발생"
     cause: "베어링 마모"
     bonus: 20
+    min_score_if_detected: 50
     conditions:
       vibration_change_gte: 0.20
       temperature_change_gte: 0.05
@@ -87,6 +92,7 @@ patterns:
     description: "다른 센서 변화 없이 온도만 지속적으로 상승"
     cause: "냉각 불량"
     bonus: 15
+    min_score_if_detected: 40
     conditions:
       temperature_change_gte: 0.10
       vibration_change_lt: 0.10
@@ -98,6 +104,7 @@ patterns:
     description: "온도, 진동, 전류가 동시에 크게 증가"
     cause: "복합 이상"
     bonus: 30
+    min_score_if_detected: 70
     conditions:
       temperature_change_gte: 0.08
       vibration_change_gte: 0.15

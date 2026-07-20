@@ -27,8 +27,9 @@ try:
 except (AttributeError, ValueError):
     pass
 
-# Claude 모델 ID (Anthropic 최신 Opus)
-MODEL = "claude-opus-4-8"
+# Claude 모델 ID — 환경변수 ANTHROPIC_MODEL 로 재정의 가능 (없으면 기본값)
+# 비용을 줄이려면 ANTHROPIC_MODEL=claude-sonnet-5 처럼 지정하면 된다.
+MODEL = os.getenv("ANTHROPIC_MODEL", "claude-opus-4-8")
 
 # -----------------------------------------------------------------------------
 # 시스템 프롬프트: AI의 역할과 제약을 못박는다.
@@ -67,17 +68,53 @@ def build_user_prompt(result: Dict[str, Any]) -> str:
     )
 
 
+def generate_template_report(result: Dict[str, Any]) -> str:
+    """
+    API 키 없이도 동작하는 템플릿 기반 보고서(마크다운).
+    LLM 없이 result.json의 값을 그대로 채워 넣어 최소한의 보고서를 만든다.
+    => 어떤 환경에서도 시스템이 끝까지 동작하도록 하는 fallback.
+    """
+    checks = result.get("recommended_checks", [])
+    checks_text = "\n".join(f"- {c}" for c in checks) if checks else "- 즉각적인 조치 필요 없음"
+
+    explanation = result.get("score_explanation", [])
+    expl_text = "\n".join(f"- {e}" for e in explanation) if explanation else "- 근거 정보 없음"
+
+    warnings = result.get("data_quality_warnings", [])
+    warn_text = ("\n\n> ⚠️ 데이터 품질 경고: " + "; ".join(warnings)) if warnings else ""
+
+    return f"""## 1. 진단 요약
+설비 **{result.get('equipment', 'Motor')}**의 상태는 **{result['status']}**이며,
+위험 점수는 **{result['risk_score']} / 100**입니다.
+
+## 2. 근거 분석
+주요 이상 센서: **{', '.join(result.get('abnormal_sensors', [])) or '없음'}**
+
+점수 산출 근거:
+{expl_text}
+
+## 3. 의심 원인 및 대표 패턴
+- 대표 패턴: **{result.get('main_pattern', '없음')}**
+- 의심 원인: **{', '.join(result.get('suspected_causes', [])) or '특이 원인 없음'}**
+
+## 4. 권장 조치
+{checks_text}{warn_text}
+
+---
+_이 보고서는 API 키가 없어 템플릿 기반으로 자동 생성되었습니다._
+_AI(Claude) 서술 보고서를 원하면 ANTHROPIC_API_KEY를 설정하고 다시 실행하세요._
+""".strip()
+
+
 def generate_report(result: Dict[str, Any]) -> str:
     """
-    result(dict)를 받아 Claude로 진단 보고서(마크다운 문자열)를 생성해 반환한다.
-    ANTHROPIC_API_KEY 미설정 시 RuntimeError를 발생시킨다.
+    result(dict)를 받아 진단 보고서(마크다운 문자열)를 생성해 반환한다.
+      - ANTHROPIC_API_KEY 가 있으면 Claude로 자연어 보고서를 생성.
+      - 없으면 템플릿 기반 보고서로 fallback (시스템이 끝까지 동작하도록).
     """
     if not os.environ.get("ANTHROPIC_API_KEY"):
-        raise RuntimeError(
-            "ANTHROPIC_API_KEY 환경변수가 설정되어 있지 않습니다.\n"
-            "  PowerShell 예:  $env:ANTHROPIC_API_KEY = 'sk-ant-...'\n"
-            "  설정 후 다시 실행하세요."
-        )
+        # PRD의 'LLM API + 템플릿 fallback' 구조: 키가 없어도 보고서는 나온다.
+        return generate_template_report(result)
 
     import anthropic  # 키가 있을 때만 import (없어도 파일 로드는 되게)
 
@@ -111,11 +148,10 @@ def main():
     with open(result_path, "r", encoding="utf-8") as f:
         result = json.load(f)
 
-    try:
-        report = generate_report(result)
-    except RuntimeError as e:
-        print(f"[안내] {e}")
-        sys.exit(1)
+    # 키가 있으면 Claude, 없으면 템플릿으로 자동 fallback
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        print("[안내] ANTHROPIC_API_KEY가 없어 템플릿 기반 보고서로 생성합니다.\n")
+    report = generate_report(result)
 
     # 화면 출력
     print(report)

@@ -29,8 +29,9 @@ data.csv ──▶ [Risk Engine] ──▶ result.json ──▶ [Claude AI] ─
 ```
 motor-monitor/
 ├── modules/
+│   ├── __init__.py             # 패키지 초기화
 │   ├── risk_engine.py          # 규칙 기반 위험 점수 엔진 (RiskEngine 클래스)
-│   └── report_generator.py     # Claude로 진단 보고서 생성
+│   └── report_generator.py     # Claude(또는 템플릿)로 진단 보고서 생성
 ├── config/
 │   └── risk_thresholds.yaml    # 임계값·가중치·패턴 조건 (하드코딩 없음)
 ├── tests/
@@ -90,7 +91,10 @@ py modules/report_generator.py result.json
 ```
 
 - 보고서가 화면에 출력되고 `report.md`로 저장됩니다.
-- 키가 없으면 안내 메시지 후 종료하며, 엔진/테스트에는 영향이 없습니다.
+- **API 키가 없어도 동작합니다.** 키가 있으면 Claude가 자연어 보고서를 쓰고,
+  없으면 `result.json` 값을 채운 **템플릿 기반 보고서로 자동 fallback**합니다.
+- 모델을 바꾸려면 `ANTHROPIC_MODEL` 환경변수를 지정하세요 (기본값 `claude-opus-4-8`,
+  비용 절감 시 `claude-sonnet-5` 등).
 
 > Windows 터미널에서 한글이 깨지면 실행 전 아래를 한 번 입력하세요:
 > `$OutputEncoding = [Console]::OutputEncoding = [Text.Encoding]::UTF8`
@@ -111,9 +115,20 @@ py modules/report_generator.py result.json
   "abnormal_sensors": ["전류", "RPM", "온도"],
   "main_pattern": "전류 증가와 RPM 감소가 동시에 발생",
   "suspected_causes": ["과부하"],
-  "recommended_checks": ["부하 상태 확인", "회전부 간섭 확인", "전원 공급 상태 확인"]
+  "recommended_checks": ["부하 상태 확인", "회전부 간섭 확인", "전원 공급 상태 확인"],
+  "analysis_window": { "baseline_range_sec": "0-119", "analysis_range_sec": "480-599" },
+  "score_explanation": [
+    "전류이(가) 기준 대비 26.0% 증가하여 전류 점수 62.2점",
+    "'전류 증가 + RPM 감소' 패턴 탐지 → 보너스 20점 (최소 보장 45점)"
+  ],
+  "data_quality_warnings": []
 }
 ```
+
+**근거/설명 필드**
+- `analysis_window` — baseline 구간과 분석 대상(후반부) 구간의 시간 범위(초).
+- `score_explanation` — 왜 이 점수가 나왔는지 사람이 읽을 수 있는 근거 문장.
+- `data_quality_warnings` — 입력 데이터 품질 경고(RPM 음수, 미정렬 등). 치명적 문제는 예외 발생.
 
 ---
 
@@ -126,7 +141,7 @@ py modules/report_generator.py result.json
 | `baseline` | baseline 비율(20%), 분석 구간, 이동평균 창 |
 | `weights` | 센서 가중치 (온도 0.25 / 진동 0.30 / 전류 0.25 / RPM 0.20) |
 | `sensor_score_mapping` | 변화율 → 0~100 점수 매핑 (dead_zone, full_score_change) |
-| `patterns` | 조합 패턴 탐지 조건 + 보너스 (과부하/베어링마모/냉각불량/복합이상) |
+| `patterns` | 조합 패턴 탐지 조건 + 보너스 + `min_score_if_detected`(패턴 감지 시 최소 보장 점수) |
 | `status_thresholds` | 상태 경계값 (0~39 정상 / 40~69 주의 / 70~100 위험) |
 | `cause_checks` | 원인별 권장 점검 항목 |
 
@@ -160,5 +175,29 @@ py -m pytest -q
 ## 기술 스택
 
 - Python, Pandas, NumPy, PyYAML
-- 진단 보고서: Anthropic Claude API (`claude-opus-4-8`)
+- 진단 보고서: Anthropic Claude API (`claude-opus-4-8`) — 키 없으면 템플릿 fallback
 - 외부 판정 API 없음 · ML 없음 (판정은 순수 규칙 기반)
+
+---
+
+## 설계 노트 및 한계
+
+### 이 프로젝트의 역할 분담
+> 생성형 AI는 **이상 여부를 판단하지 않습니다.** 이상 판단은 baseline 변화율과
+> 조합 패턴을 기반으로 한 **Risk Score Engine**이 수행하고, AI는 그 결과를
+> 사람이 읽기 쉬운 자연어 리포트로 변환하는 역할만 합니다.
+
+### threshold 값의 성격
+> 본 프로젝트의 임계값·가중치는 실제 산업 표준값이 아니라, **synthetic data 기반
+> MVP 검증을 위한 초기 경험적 기준값**입니다. 추후 실제 DC 모터 센서 데이터를
+> 확보하면 baseline·threshold를 재보정(calibration)할 수 있도록 config 파일로
+> 분리해 두었습니다.
+
+### 현재 한계
+> 현재 버전은 synthetic data 기반 MVP이며 실제 산업 설비 진단 정확도를 보장하지
+> 않습니다. 목적은 설비 이상징후 분석 시스템의 구조를 학부생 수준에서 구현하고,
+> 생성형 AI를 리포트 자동화 컴포넌트로 통합하는 것입니다.
+
+향후 확장 방향:
+- 후반부 평균 대신 **rolling window 기반 risk score 시계열** 산출 (중간 구간 이상도 포착)
+- 실제 센서 데이터 확보 후 threshold calibration
