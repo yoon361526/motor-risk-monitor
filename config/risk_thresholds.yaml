@@ -1,0 +1,136 @@
+# =============================================================================
+# risk_thresholds.yaml
+# 모터 이상징후 진단 엔진(Risk Score Engine) 설정 파일
+#
+# 설계 원칙:
+#   - 모든 판정 기준(경계값, 가중치, 변화율 임계값, 조합 패턴 조건)을
+#     코드에서 분리하여 이 파일에서만 관리한다. (하드코딩 금지)
+#   - 값을 조정하면 엔진 재배포 없이 판정 민감도를 바꿀 수 있다.
+# =============================================================================
+
+equipment: "DC Motor"
+
+# -----------------------------------------------------------------------------
+# 1. baseline / 분석 구간 설정
+#    - baseline_ratio: CSV 앞쪽 몇 %를 "정상 기준"으로 볼지 (0.20 = 초기 20%)
+#    - analysis_tail_ratio: 변화율 산출 시 사용할 후반부 구간 비율 (0.20 = 뒤쪽 20%)
+#    - moving_average_window: 후반부 대표값 계산 시 적용할 이동평균 창(초)
+# -----------------------------------------------------------------------------
+baseline:
+  baseline_ratio: 0.20
+  analysis_tail_ratio: 0.20
+  moving_average_window: 10
+
+# -----------------------------------------------------------------------------
+# 2. 센서별 최종 가중치 (합계 1.0)
+#    Final = Σ(sensor_score * weight) + pattern_bonus
+# -----------------------------------------------------------------------------
+weights:
+  temperature: 0.25
+  vibration: 0.30
+  current: 0.25
+  rpm: 0.20
+
+# -----------------------------------------------------------------------------
+# 3. 변화율 → 부분 점수(0~100) 매핑
+#    - full_score_change: 이 변화율에 도달하면 부분 점수 100점
+#    - dead_zone: 이 변화율 이하는 노이즈로 보고 0점 처리
+#    선형 매핑:  score = clip( (change - dead_zone) / (full_score_change - dead_zone) * 100 , 0, 100)
+#    (예: 온도 dead_zone=0.02, full=0.30 → 30% 상승 시 100점)
+# -----------------------------------------------------------------------------
+sensor_score_mapping:
+  temperature:
+    dead_zone: 0.02
+    full_score_change: 0.30
+  vibration:
+    dead_zone: 0.05
+    full_score_change: 0.80
+  current:
+    dead_zone: 0.03
+    full_score_change: 0.40
+  rpm:               # rpm은 "감소율(rpm_drop)"을 사용
+    dead_zone: 0.02
+    full_score_change: 0.25
+
+# -----------------------------------------------------------------------------
+# 4. 조합 패턴 탐지 조건 + 보너스 강도
+#    각 패턴은 변화율 임계값 조건을 모두 만족할 때 탐지된다.
+#    bonus: 탐지 시 최종 점수에 더해지는 값
+#    조건 키 의미:
+#       current_change_gte  : 전류 증가율 >= 값
+#       rpm_drop_gte        : RPM 감소율 >= 값
+#       vibration_change_gte: 진동 증가율 >= 값
+#       temperature_change_gte: 온도 상승률 >= 값
+#       *_lt                : 해당 변화율 < 값 (변화가 작음을 의미)
+# -----------------------------------------------------------------------------
+patterns:
+  overload:
+    label: "전류 증가 + RPM 감소"
+    description: "전류 증가와 RPM 감소가 동시에 발생"
+    cause: "과부하"
+    bonus: 20
+    conditions:
+      current_change_gte: 0.10
+      rpm_drop_gte: 0.05
+
+  bearing_wear:
+    label: "진동 증가 + 온도 상승"
+    description: "진동 증가와 온도 상승이 동시에 발생"
+    cause: "베어링 마모"
+    bonus: 20
+    conditions:
+      vibration_change_gte: 0.20
+      temperature_change_gte: 0.05
+
+  cooling_fault:
+    label: "온도 지속 상승 (진동/전류/RPM 변화 작음)"
+    description: "다른 센서 변화 없이 온도만 지속적으로 상승"
+    cause: "냉각 불량"
+    bonus: 15
+    conditions:
+      temperature_change_gte: 0.10
+      vibration_change_lt: 0.10
+      current_change_lt: 0.08
+      rpm_drop_lt: 0.05
+
+  compound_fault:
+    label: "온도 + 진동 + 전류 동시 증가"
+    description: "온도, 진동, 전류가 동시에 크게 증가"
+    cause: "복합 이상"
+    bonus: 30
+    conditions:
+      temperature_change_gte: 0.08
+      vibration_change_gte: 0.15
+      current_change_gte: 0.10
+
+# -----------------------------------------------------------------------------
+# 5. 상태 분류 경계값
+#    score <= normal_max        -> 정상
+#    normal_max < score <= caution_max -> 주의
+#    score > caution_max        -> 위험
+# -----------------------------------------------------------------------------
+status_thresholds:
+  normal_max: 39     # 0~39  : 정상
+  caution_max: 69    # 40~69 : 주의
+                     # 70~100: 위험
+
+# -----------------------------------------------------------------------------
+# 6. 원인 → 점검 항목 매핑 (설명 가능성)
+# -----------------------------------------------------------------------------
+cause_checks:
+  "과부하":
+    - "부하 상태 확인"
+    - "회전부 간섭 확인"
+    - "전원 공급 상태 확인"
+  "베어링 마모":
+    - "베어링 윤활 상태 확인"
+    - "축 정렬(얼라인먼트) 점검"
+    - "진동 스펙트럼 분석"
+  "냉각 불량":
+    - "냉각팬/방열판 상태 확인"
+    - "주변 온도 및 통풍 확인"
+    - "냉각수/오일 순환 점검"
+  "복합 이상":
+    - "즉시 설비 정지 검토"
+    - "부하/베어링/냉각 종합 점검"
+    - "전문 정비 인력 투입"

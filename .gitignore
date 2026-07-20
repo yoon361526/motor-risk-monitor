@@ -1,0 +1,48 @@
+# ===== 비밀정보 (절대 커밋 금지) =====
+.env
+.env.*
+*.key
+secrets.*
+# ANTHROPIC_API_KEY 등은 환경변수로만 관리하고 파일로 저장하지 말 것
+
+# ===== Python 캐시/컴파일 =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# ===== 테스트/커버리지 =====
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# ===== 가상환경 =====
+.venv/
+venv/
+env/
+ENV/
+
+# ===== 실행 산출물 (엔진/AI가 생성하는 결과물) =====
+result.json
+report.md
+report.txt
+result.txt
+
+# ===== 데이터 (원본 CSV는 필요시 아래 주석 해제) =====
+# data/
+# *.csv
+
+# ===== IDE / 에디터 =====
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+desktop.ini
