@@ -36,6 +36,8 @@ motor-monitor/
 │   └── risk_thresholds.yaml    # 임계값·가중치·패턴 조건 (하드코딩 없음)
 ├── tests/
 │   └── test_risk_engine.py     # pytest 단위 테스트
+├── data/                       # generate_data.py로 만든 synthetic CSV
+├── generate_data.py            # 고장 유형별 synthetic 데이터 생성기
 ├── run_analysis.py             # CSV → result.json 실행 스크립트
 ├── .gitignore
 └── README.md
@@ -56,6 +58,27 @@ pip install pandas numpy pyyaml pytest anthropic
 ---
 
 ## 사용법
+
+### 0단계 — synthetic 데이터 생성 (선택)
+
+실제 센서 데이터가 없을 때, 고장 유형별 예제 CSV를 `data/`에 생성합니다.
+
+```bash
+py generate_data.py
+```
+
+생성되는 파일 (각 600행):
+
+| 파일 | 모사한 고장 | 엔진 진단 결과 |
+|------|-------------|----------------|
+| `data/normal.csv` | 정상 | 정상 |
+| `data/overload.csv` | 과부하 (전류↑+RPM↓) | 주의 |
+| `data/bearing_wear.csv` | 베어링 마모 (진동↑+온도↑) | 주의 |
+| `data/cooling_fault.csv` | 냉각 불량 (온도만↑) | 주의 |
+| `data/compound_fault.csv` | 복합 이상 (온도+진동+전류↑) | 위험 |
+
+> 단순 랜덤이 아니라 각 고장 유형의 센서 변화 특성을 반영하며, 재현성을 위해
+> 난수 시드를 고정했습니다.
 
 ### 1단계 — 위험 점수 계산 (CSV → result.json)
 
