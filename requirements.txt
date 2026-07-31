@@ -1,0 +1,11 @@
+# 모터 이상징후 진단 엔진 의존성
+# 설치:  py -m pip install -r requirements.txt
+
+pandas>=2.0        # CSV 로드 및 시계열 처리
+numpy>=1.24        # 수치 계산 (점수 clip 등)
+pyyaml>=6.0        # config(risk_thresholds.yaml) 로드
+pytest>=8.0        # 단위 테스트
+
+# AI 리포트 생성용 (Claude API). 키가 없으면 템플릿 fallback으로 동작하므로
+# 이 패키지가 없어도 엔진/템플릿 리포트는 동작한다.
+anthropic>=0.117   # Anthropic Claude SDK

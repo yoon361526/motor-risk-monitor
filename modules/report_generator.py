@@ -118,22 +118,30 @@ def generate_report(result: Dict[str, Any]) -> str:
 
     import anthropic  # 키가 있을 때만 import (없어도 파일 로드는 되게)
 
-    client = anthropic.Anthropic()  # 키는 환경변수에서 자동으로 읽음
+    try:
+        client = anthropic.Anthropic()  # 키는 환경변수에서 자동으로 읽음
 
-    # 보고서 생성은 구조화된 데이터로부터의 서술 작업 → adaptive thinking 사용
-    response = client.messages.create(
-        model=MODEL,
-        max_tokens=4000,
-        thinking={"type": "adaptive"},
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": build_user_prompt(result)}],
-    )
+        # 보고서 생성은 구조화된 데이터로부터의 서술 작업 → adaptive thinking 사용
+        response = client.messages.create(
+            model=MODEL,
+            max_tokens=4000,
+            thinking={"type": "adaptive"},
+            system=SYSTEM_PROMPT,
+            messages=[{"role": "user", "content": build_user_prompt(result)}],
+        )
 
-    # 응답에서 텍스트 블록만 추출 (thinking 블록은 건너뜀)
-    text = "".join(
-        block.text for block in response.content if block.type == "text"
-    )
-    return text.strip()
+        # 응답에서 텍스트 블록만 추출 (thinking 블록은 건너뜀)
+        text = "".join(
+            block.text for block in response.content if block.type == "text"
+        )
+        return text.strip()
+
+    except Exception as e:
+        # 잘못된 키/네트워크/요금 문제 등으로 API 호출이 실패해도
+        # 크래시 대신 안내 후 템플릿 리포트로 대체 (시스템은 끝까지 동작)
+        print(f"[경고] AI 리포트 생성 실패({type(e).__name__}: {e}).\n"
+              f"       템플릿 기반 보고서로 대체합니다.")
+        return generate_template_report(result)
 
 
 def main():
