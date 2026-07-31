@@ -2,10 +2,10 @@
 
 모터 센서 데이터(온도·진동·전류·RPM)를 분석해 **위험 점수**를 계산하고,
 설비 상태를 **정상 / 주의 / 위험**으로 분류하는 **규칙 기반(rule-based) 진단 엔진**입니다.
-진단 결과를 바탕으로 Claude(생성형 AI)가 사람이 읽기 좋은 **진단 보고서**를 자연어로 작성합니다.
+진단 결과를 바탕으로 생성형 AI(OpenAI GPT)가 사람이 읽기 좋은 **진단 보고서**를 자연어로 작성합니다.
 
 ```
-data.csv ──▶ [Risk Engine] ──▶ result.json ──▶ [Claude AI] ──▶ report.md
+data.csv ──▶ [Risk Engine] ──▶ result.json ──▶ [OpenAI GPT] ──▶ report.md
              (규칙 기반 판정)     (근거 데이터)      (자연어 서술)     (진단 보고서)
 ```
 
@@ -37,8 +37,11 @@ motor-monitor/
 ├── tests/
 │   └── test_risk_engine.py     # pytest 단위 테스트
 ├── data/                       # generate_data.py로 만든 synthetic CSV
+├── app.py                      # Streamlit 진단 대시보드 (웹 UI)
 ├── generate_data.py            # 고장 유형별 synthetic 데이터 생성기
 ├── run_analysis.py             # CSV → result.json 실행 스크립트
+├── .env.example                # API 키 템플릿 (.env는 gitignore)
+├── requirements.txt
 ├── .gitignore
 └── README.md
 ```
@@ -50,14 +53,36 @@ motor-monitor/
 Python 3.10+ 필요.
 
 ```bash
-pip install pandas numpy pyyaml pytest anthropic
+pip install pandas numpy pyyaml pytest openai
 ```
 
 > Windows에서 `python` 명령이 없으면 `py`를 사용하세요. (예: `py -m pip install ...`)
 
 ---
 
-## 사용법
+## 대시보드 (웹 UI) — 권장 실행 방법
+
+CSV를 올리면 진단 결과·점수·센서 그래프·AI 리포트를 한 화면에서 보여주는
+Streamlit 대시보드입니다. 성과공유회/시연에 적합합니다.
+
+```bash
+py -m pip install -r requirements.txt   # 최초 1회 (streamlit 포함)
+py -m streamlit run app.py              # 로컬 서버 실행 → 브라우저 자동 열림
+```
+
+> Windows에서 `streamlit run ...`이 "명령을 찾을 수 없음"으로 실패하면
+> (스크립트 폴더가 PATH에 없어서), 위처럼 **`py -m streamlit run app.py`**로 실행하세요.
+
+- 사이드바에서 **예제 데이터 선택** 또는 **CSV 업로드** → 즉시 진단
+- 위험 점수 게이지, 센서 4종 시계열, 탐지 패턴/원인/조치, 점수 근거 표시
+- "리포트 생성" 버튼 → AI(또는 템플릿) 진단 리포트
+- 로컬 서버라 **인터넷 없이도** 동작 (`.env`에 키가 있으면 AI 리포트까지)
+
+> 종료: 터미널에서 `Ctrl + C`
+
+아래 CLI 방식(1~2단계)은 대시보드 없이 터미널에서 돌리고 싶을 때 사용합니다.
+
+## 사용법 (CLI)
 
 ### 0단계 — synthetic 데이터 생성 (선택)
 
@@ -106,18 +131,20 @@ py run_analysis.py <CSV경로>
 ### 2단계 — AI 진단 보고서 생성 (result.json → report.md)
 
 ```bash
-# 먼저 Anthropic API 키를 환경변수로 설정
-# PowerShell:  $env:ANTHROPIC_API_KEY = "sk-ant-..."
-# bash:        export ANTHROPIC_API_KEY="sk-ant-..."
+# 키는 프로젝트 루트의 .env 파일에 넣어두면 자동 인식됩니다 (.env는 gitignore).
+#   OPENAI_API_KEY=sk-...
+# 또는 환경변수로 직접 지정도 가능:
+# PowerShell:  $env:OPENAI_API_KEY = "sk-..."
+# bash:        export OPENAI_API_KEY="sk-..."
 
 py modules/report_generator.py result.json
 ```
 
 - 보고서가 화면에 출력되고 `report.md`로 저장됩니다.
-- **API 키가 없어도 동작합니다.** 키가 있으면 Claude가 자연어 보고서를 쓰고,
+- **API 키가 없어도 동작합니다.** 키가 있으면 OpenAI GPT가 자연어 보고서를 쓰고,
   없으면 `result.json` 값을 채운 **템플릿 기반 보고서로 자동 fallback**합니다.
-- 모델을 바꾸려면 `ANTHROPIC_MODEL` 환경변수를 지정하세요 (기본값 `claude-opus-4-8`,
-  비용 절감 시 `claude-sonnet-5` 등).
+- 모델을 바꾸려면 `OPENAI_MODEL` 환경변수를 지정하세요 (기본값 `gpt-4o`,
+  비용 절감 시 `gpt-4o-mini` 등).
 
 > Windows 터미널에서 한글이 깨지면 실행 전 아래를 한 번 입력하세요:
 > `$OutputEncoding = [Console]::OutputEncoding = [Text.Encoding]::UTF8`
@@ -198,7 +225,7 @@ py -m pytest -q
 ## 기술 스택
 
 - Python, Pandas, NumPy, PyYAML
-- 진단 보고서: Anthropic Claude API (`claude-opus-4-8`) — 키 없으면 템플릿 fallback
+- 진단 보고서: OpenAI API (`gpt-4o`) — 키 없으면 템플릿 fallback
 - 외부 판정 API 없음 · ML 없음 (판정은 순수 규칙 기반)
 
 ---

@@ -2,7 +2,7 @@
 report_generator.py
 ===================
 Risk Engine가 산출한 진단 결과(result.json)를 바탕으로,
-Claude(생성형 AI)가 사람이 읽기 좋은 설비 진단 보고서를 자연어로 작성한다.
+생성형 AI(OpenAI GPT)가 사람이 읽기 좋은 설비 진단 보고서를 자연어로 작성한다.
 
 ★ 역할 분담 (설계 원칙)
   - 판정(위험 점수/상태/패턴/원인)은 이미 규칙 기반 Risk Engine이 끝냈다.
@@ -10,8 +10,8 @@ Claude(생성형 AI)가 사람이 읽기 좋은 설비 진단 보고서를 자�
     => 이렇게 하면 설명 가능성(왜 그 결론인지)이 유지된다.
 
 인증
-  - 환경변수 ANTHROPIC_API_KEY 가 있으면 그대로 동작한다.
-  - 키가 없으면 안내 메시지를 출력하고 종료한다(엔진/테스트에는 영향 없음).
+  - 환경변수 OPENAI_API_KEY 가 있으면 그대로 동작한다(.env에 넣어두면 자동 인식).
+  - 키가 없거나 호출이 실패하면 템플릿 기반 보고서로 자동 fallback한다.
 """
 
 from __future__ import annotations
@@ -53,9 +53,9 @@ def _load_dotenv() -> None:
 # import 시점에 .env 로드 (키를 .env에 넣어두면 자동 인식)
 _load_dotenv()
 
-# Claude 모델 ID — 환경변수 ANTHROPIC_MODEL 로 재정의 가능 (없으면 기본값)
-# 비용을 줄이려면 ANTHROPIC_MODEL=claude-sonnet-5 처럼 지정하면 된다.
-MODEL = os.getenv("ANTHROPIC_MODEL", "claude-opus-4-8")
+# OpenAI 모델 ID — 환경변수 OPENAI_MODEL 로 재정의 가능 (없으면 기본값)
+# 비용을 줄이려면 OPENAI_MODEL=gpt-4o-mini 처럼 지정하면 된다.
+MODEL = os.getenv("OPENAI_MODEL", "gpt-4o")
 
 # -----------------------------------------------------------------------------
 # 시스템 프롬프트: AI의 역할과 제약을 못박는다.
@@ -128,38 +128,36 @@ def generate_template_report(result: Dict[str, Any]) -> str:
 
 ---
 _이 보고서는 API 키가 없어 템플릿 기반으로 자동 생성되었습니다._
-_AI(Claude) 서술 보고서를 원하면 ANTHROPIC_API_KEY를 설정하고 다시 실행하세요._
+_AI 서술 보고서를 원하면 OPENAI_API_KEY를 설정하고 다시 실행하세요._
 """.strip()
 
 
 def generate_report(result: Dict[str, Any]) -> str:
     """
     result(dict)를 받아 진단 보고서(마크다운 문자열)를 생성해 반환한다.
-      - ANTHROPIC_API_KEY 가 있으면 Claude로 자연어 보고서를 생성.
+      - OPENAI_API_KEY 가 있으면 OpenAI GPT로 자연어 보고서를 생성.
       - 없으면 템플릿 기반 보고서로 fallback (시스템이 끝까지 동작하도록).
     """
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        # PRD의 'LLM API + 템플릿 fallback' 구조: 키가 없어도 보고서는 나온다.
+    if not os.environ.get("OPENAI_API_KEY"):
+        # 'LLM API + 템플릿 fallback' 구조: 키가 없어도 보고서는 나온다.
         return generate_template_report(result)
 
-    import anthropic  # 키가 있을 때만 import (없어도 파일 로드는 되게)
+    import openai  # 키가 있을 때만 import (없어도 파일 로드는 되게)
 
     try:
-        client = anthropic.Anthropic()  # 키는 환경변수에서 자동으로 읽음
+        client = openai.OpenAI()  # 키는 환경변수 OPENAI_API_KEY에서 자동으로 읽음
 
-        # 보고서 생성은 구조화된 데이터로부터의 서술 작업 → adaptive thinking 사용
-        response = client.messages.create(
+        # 판정은 엔진이 끝냈고, AI는 근거(JSON)를 서술만 → system + user 메시지 구성
+        response = client.chat.completions.create(
             model=MODEL,
             max_tokens=4000,
-            thinking={"type": "adaptive"},
-            system=SYSTEM_PROMPT,
-            messages=[{"role": "user", "content": build_user_prompt(result)}],
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": build_user_prompt(result)},
+            ],
         )
 
-        # 응답에서 텍스트 블록만 추출 (thinking 블록은 건너뜀)
-        text = "".join(
-            block.text for block in response.content if block.type == "text"
-        )
+        text = response.choices[0].message.content or ""
         return text.strip()
 
     except Exception as e:
@@ -182,9 +180,9 @@ def main():
     with open(result_path, "r", encoding="utf-8") as f:
         result = json.load(f)
 
-    # 키가 있으면 Claude, 없으면 템플릿으로 자동 fallback
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        print("[안내] ANTHROPIC_API_KEY가 없어 템플릿 기반 보고서로 생성합니다.\n")
+    # 키가 있으면 OpenAI GPT, 없으면 템플릿으로 자동 fallback
+    if not os.environ.get("OPENAI_API_KEY"):
+        print("[안내] OPENAI_API_KEY가 없어 템플릿 기반 보고서로 생성합니다.\n")
     report = generate_report(result)
 
     # 화면 출력
