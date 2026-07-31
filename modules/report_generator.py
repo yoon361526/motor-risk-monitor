@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import os
 import sys
+from pathlib import Path
 from typing import Any, Dict
 
 # Windows 터미널(cp949)에서 한글이 깨지지 않도록 출력 인코딩을 UTF-8로 고정
@@ -26,6 +27,31 @@ try:
     sys.stdout.reconfigure(encoding="utf-8")
 except (AttributeError, ValueError):
     pass
+
+
+def _load_dotenv() -> None:
+    """
+    프로젝트 루트의 .env 파일을 읽어 환경변수로 로드한다 (외부 패키지 불필요).
+    - 이미 설정된 환경변수는 덮어쓰지 않는다(터미널에서 직접 지정한 값 우선).
+    - .env는 .gitignore로 깃허브에 올라가지 않으므로 키를 안전하게 보관할 수 있다.
+    """
+    env_path = Path(__file__).resolve().parent.parent / ".env"
+    if not env_path.exists():
+        return
+    for line in env_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, val = line.partition("=")
+        key = key.strip()
+        val = val.strip().strip('"').strip("'")
+        # 값이 비어있지 않고, 아직 환경변수에 없을 때만 설정
+        if key and val and key not in os.environ:
+            os.environ[key] = val
+
+
+# import 시점에 .env 로드 (키를 .env에 넣어두면 자동 인식)
+_load_dotenv()
 
 # Claude 모델 ID — 환경변수 ANTHROPIC_MODEL 로 재정의 가능 (없으면 기본값)
 # 비용을 줄이려면 ANTHROPIC_MODEL=claude-sonnet-5 처럼 지정하면 된다.

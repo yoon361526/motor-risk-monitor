@@ -1,9 +1,11 @@
 # ===== 비밀정보 (절대 커밋 금지) =====
+# 실제 API 키는 .env 에만 넣는다 (이 파일은 깃허브에 안 올라감)
 .env
 .env.*
+# 단, 실제 키가 없는 템플릿(.env.example)은 커밋 허용
+!.env.example
 *.key
 secrets.*
-# ANTHROPIC_API_KEY 등은 환경변수로만 관리하고 파일로 저장하지 말 것
 
 # ===== Python 캐시/컴파일 =====
 __pycache__/
