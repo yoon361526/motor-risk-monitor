@@ -2,10 +2,10 @@
 
 모터 센서 데이터(온도·진동·전류·RPM)를 분석해 **위험 점수**를 계산하고,
 설비 상태를 **정상 / 주의 / 위험**으로 분류하는 **규칙 기반(rule-based) 진단 엔진**입니다.
-진단 결과를 바탕으로 생성형 AI(OpenAI GPT)가 사람이 읽기 좋은 **진단 보고서**를 자연어로 작성합니다.
+진단 결과를 바탕으로 생성형 AI(Anthropic Claude)가 사람이 읽기 좋은 **진단 보고서**를 자연어로 작성합니다.
 
 ```
-data.csv ──▶ [Risk Engine] ──▶ result.json ──▶ [OpenAI GPT] ──▶ report.md
+data.csv ──▶ [Risk Engine] ──▶ result.json ──▶ [Claude] ──▶ report.md
              (규칙 기반 판정)     (근거 데이터)      (자연어 서술)     (진단 보고서)
 ```
 
@@ -53,7 +53,7 @@ motor-monitor/
 Python 3.10+ 필요.
 
 ```bash
-pip install pandas numpy pyyaml pytest openai
+pip install pandas numpy pyyaml pytest anthropic
 ```
 
 > Windows에서 `python` 명령이 없으면 `py`를 사용하세요. (예: `py -m pip install ...`)
@@ -132,19 +132,19 @@ py run_analysis.py <CSV경로>
 
 ```bash
 # 키는 프로젝트 루트의 .env 파일에 넣어두면 자동 인식됩니다 (.env는 gitignore).
-#   OPENAI_API_KEY=sk-...
+#   ANTHROPIC_API_KEY=sk-ant-...
 # 또는 환경변수로 직접 지정도 가능:
-# PowerShell:  $env:OPENAI_API_KEY = "sk-..."
-# bash:        export OPENAI_API_KEY="sk-..."
+# PowerShell:  $env:ANTHROPIC_API_KEY = "sk-ant-..."
+# bash:        export ANTHROPIC_API_KEY="sk-ant-..."
 
 py modules/report_generator.py result.json
 ```
 
 - 보고서가 화면에 출력되고 `report.md`로 저장됩니다.
-- **API 키가 없어도 동작합니다.** 키가 있으면 OpenAI GPT가 자연어 보고서를 쓰고,
+- **API 키가 없어도 동작합니다.** 키가 있으면 Claude가 자연어 보고서를 쓰고,
   없으면 `result.json` 값을 채운 **템플릿 기반 보고서로 자동 fallback**합니다.
-- 모델을 바꾸려면 `OPENAI_MODEL` 환경변수를 지정하세요 (기본값 `gpt-4o`,
-  비용 절감 시 `gpt-4o-mini` 등).
+- 모델을 바꾸려면 `ANTHROPIC_MODEL` 환경변수를 지정하세요
+  (기본값 `claude-sonnet-4-6`).
 
 > Windows 터미널에서 한글이 깨지면 실행 전 아래를 한 번 입력하세요:
 > `$OutputEncoding = [Console]::OutputEncoding = [Text.Encoding]::UTF8`
@@ -225,7 +225,7 @@ py -m pytest -q
 ## 기술 스택
 
 - Python, Pandas, NumPy, PyYAML
-- 진단 보고서: OpenAI API (`gpt-4o`) — 키 없으면 템플릿 fallback
+- 진단 보고서: Anthropic Claude API (`claude-sonnet-4-6`) — 키 없으면 템플릿 fallback
 - 외부 판정 API 없음 · ML 없음 (판정은 순수 규칙 기반)
 
 ---

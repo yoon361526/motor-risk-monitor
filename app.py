@@ -79,8 +79,8 @@ def render_summary(result: dict) -> None:
         st.markdown(
             f"<div style='padding:16px;border-radius:10px;background:{color};"
             f"color:white;text-align:center;'>"
-            f"<div style='font-size:14px;'>설비 상태</div>"
-            f"<div style='font-size:34px;font-weight:700;'>{status}</div></div>",
+            f"<div style='font-size:18px;'>설비 상태</div>"
+            f"<div style='font-size:38px;font-weight:700;'>{status}</div></div>",
             unsafe_allow_html=True,
         )
     with c2:
@@ -169,7 +169,7 @@ def main() -> None:
 
     # AI 리포트
     st.subheader("📄 AI 진단 리포트")
-    st.caption("버튼을 누르면 리포트를 생성합니다. (API 키 없으면 템플릿으로 자동 생성)")
+    st.caption("버튼을 누르면 리포트를 생성합니다.")
     if st.button("리포트 생성", type="primary"):
         with st.spinner("리포트 작성 중..."):
             report = generate_report(result)
