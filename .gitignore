@@ -48,3 +48,7 @@ result.txt
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Paderborn 원본과 재생성 가능한 특징 추출 결과
+data/paderborn/raw/
+data/paderborn/derived/

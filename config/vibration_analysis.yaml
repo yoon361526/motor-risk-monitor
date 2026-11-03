@@ -1,0 +1,33 @@
+# Paderborn 진동 비교 실험의 초기 설정입니다. 검증된 산업 경고 기준이 아닙니다.
+# 설정을 바꾸면 prepare → train을 다시 실행해야 합니다.
+condition: N09_M07_F10
+records_per_bearing: 20
+
+# 단위는 초입니다. 실제 MAT 시간축으로 구간을 나눕니다.
+window_sec: 0.25
+hop_sec: 0.125
+features:
+  - rms_centered
+  - kurtosis_pearson
+  - peak_to_peak
+  - crest_factor
+
+# 겹치는 구간 3개가 연속 초과해야 이상 이력으로 기록합니다.
+# 기본 설정에서 이 구간들이 덮는 시간은 약 0.5초입니다.
+minimum_consecutive_windows: 3
+
+# 설정 조정용 '정상 기록'의 기록 점수 95백분위수로 경계를 정합니다.
+# 손상 라벨로 학습하지 않으며, 최종 평가 데이터는 여기서 사용하지 않습니다.
+# 이 값이 새로운 베어링에서 오경보율 5%를 보장하는 것은 아닙니다.
+calibration_quantile: 0.95
+
+isolation_forest:
+  n_estimators: 200
+  random_state: 42
+
+# 같은 베어링의 모든 기록을 하나의 용도로 묶습니다.
+# reference: 정상 기준 학습 / tuning: 경계 설정 및 비교 / evaluation: 최종 평가
+splits:
+  reference: [K001, K002]
+  tuning: [K003, K004, KA04, KI04]
+  evaluation: [K005, K006, KA15, KI14]

@@ -1,5 +1,155 @@
 # 모터 이상징후 진단 엔진 (Motor Risk Score Engine)
 
+## 진동 비교 분석: 정상 참조 통계 + Isolation Forest
+
+다운로드한 Paderborn 자료를 사용해, **외부 정상 기록 기반 통계 방식**과
+**정상 기록으로 학습한 Isolation Forest**를 같은 조건에서 비교합니다.
+두 방식의 결과를 각각 표시하고, 이상 구간 이력과 점검 보고서를 저장합니다.
+현재 기능은 측정 기록의 오프라인 분석이며, 산업 설비의 실시간 보호 기능이 아닙니다.
+
+### 실행
+
+```powershell
+# 의존성 설치
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+
+# Downloads의 베어링별 RAR에서 N09_M07_F10 조건만 추출
+.\.venv\Scripts\python.exe run_vibration_analysis.py prepare
+
+# 정상 기준 학습, 정상 경계 설정, 설정 조정용 결과 저장
+.\.venv\Scripts\python.exe run_vibration_analysis.py train
+
+# 대시보드에서 'Paderborn 비교 분석' 선택
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+다른 다운로드 폴더는 `prepare --archive-dir "D:\\datasets"`로 지정할 수 있습니다.
+Windows 기본 `tar`로 RAR을 읽습니다. 다른 OS에서는 RAR을 지원하는 bsdtar가 필요합니다.
+기존 원본은 그대로 두며, 다른 내용의 파일이 이미 있으면 덮어쓰지 않고 중단합니다.
+
+### 데이터 분리와 평가
+
+초기 분리와 분석 설정은 `config/vibration_analysis.yaml`에 있습니다.
+
+| 용도 | 베어링 | 기록 수 |
+|---|---|---:|
+| 기준 생성(reference) | 정상 K001, K002 | 40 |
+| 설정 조정(tuning) | 정상 K003, K004 / 손상 KA04, KI04 | 80 |
+| 최종 평가(evaluation) | 정상 K005, K006 / 손상 KA15, KI14 | 80 |
+
+필요한 압축파일은 위 베어링 10개입니다. 네 운전 조건 전체를 풀지 않고,
+한 조건의 200개 MAT와 설명 PDF·측정 로그만 `data/paderborn/raw/` 아래에 추출합니다.
+같은 베어링의 기록이나 겹치는 시간 구간을 서로 다른 집합으로 나누지 않습니다.
+같은 정상 베어링의 여러 기록은 독립 베어링 표본이 아니므로, 평가에는 기록 수와 베어링 수를 함께 표시합니다.
+
+`train`은 reference와 tuning만 읽습니다. 두 모델은 reference 정상 기록으로 학습하고,
+경고 경계는 tuning 중 **정상 기록만** 사용해 정합니다. 손상 라벨은 학습 입력에 넣지 않습니다.
+이후 tuning의 정상·손상 기록으로 오경보율·미탐률을 보여 줍니다. 이 결과는 최종 성능이 아닙니다.
+
+분석 방식과 설정을 확정한 뒤 다음 명령으로 최종 평가합니다.
+
+```powershell
+.\.venv\Scripts\python.exe run_vibration_analysis.py evaluate
+```
+
+이 명령은 저장된 모델과 경계를 그대로 사용하며 재학습하지 않습니다.
+최종 평가 결과를 확인한 뒤 설정을 변경하면 같은 자료를 새로운 미공개 평가로 취급할 수 없습니다.
+대시보드의 기본 파일 목록은 tuning만 포함하며, 평가용 베어링의 개별 업로드·수동 분석은 제한합니다.
+
+단일 기록 분석과 JSON·템플릿 보고서 저장은 다음과 같습니다.
+
+```powershell
+.\.venv\Scripts\python.exe run_vibration_analysis.py analyze data/paderborn/raw/tuning/N09_M07_F10_KA04_1.mat
+```
+
+### 점수와 이상 이력의 의미
+
+- 특징: 구간 평균을 제거한 RMS, Pearson 첨도, 최대·최소 차이, 파고율.
+- 통계 방식: 정상 특징의 중앙값과 `1.4826 × MAD`를 사용한 절대 편차 중 최댓값.
+  MAD가 0에 가까우면 작은 양의 바닥값을 사용해 0 나눗셈을 막습니다.
+- 머신러닝 방식: Isolation Forest의 `-score_samples`. 큰 값이 더 이상한 방향입니다.
+  기본 설정은 트리 200개, 난수 시드 42입니다. 기본 `predict` 경계는 사용하지 않습니다.
+- 경계 설정: 정상 tuning 기록마다 '연속 3개 점수의 최솟값 중 최댓값'을 계산하고,
+  그 기록 점수의 95백분위수(`higher`)를 각 방식의 경계로 정합니다.
+- 실제 경고: 경계보다 **엄격히 큰** 점수가 3개 구간 연속 나타날 때 확정합니다.
+  경계 설정과 실제 판정에 같은 연속 조건을 적용합니다.
+- 기본 창 0.25초·이동 0.125초에서 연속 3개 창의 시간 범위는 약 0.5초입니다.
+  겹치는 이상 시간 구간은 합치고, 마지막 구간의 상태와 전체 이상 이력을 따로 보관합니다.
+- 점수는 고장 확률이나 검증된 위험 등급이 아닙니다. 두 방식의 점수 크기를 직접 비교하지 않습니다.
+  경고 없음은 이 기준에서 이상 이력을 찾지 못했다는 뜻이며, 정상 상태를 보장하지 않습니다.
+- 진동 단위가 없는 MAT는 원본 수치로 보존합니다. 다른 단위나 운전 조건의 기준을 섞지 않습니다.
+  일정 신호처럼 첨도·파고율이 정의되지 않는 입력은 정상값으로 채우지 않고 분석을 중단합니다.
+- 통계 특징 경계는 Isolation Forest의 특징 중요도가 아닙니다. 손상 위치나 원인도 단정하지 않습니다.
+
+### 결과와 코드 위치
+
+결과는 `data/paderborn/derived/comparison/`에 저장됩니다.
+
+- `dataset_manifest.json`: 용도별 원본 목록과 SHA-256. 특징 캐시도 원본 해시와 추출 설정을 사용합니다.
+- `models.joblib`, `model_metadata.json`: 이 프로젝트에서 학습한 두 모델, 설정, 기준·경계 설정 원본 정보.
+  출처를 모르는 joblib 모델을 이 경로에 넣지 마세요.
+- `tuning_metrics.json`, 명시적으로 평가한 경우 `evaluation_metrics.json`: 파일 단위 혼동행렬·오경보율·미탐률·베어링별 결과.
+- `analyses/tuning/`, `analyses/manual/`, `analyses/evaluation/`: 기록별 JSON과 마크다운 보고서.
+
+`modules/vibration_config.py`는 설정 검사, `vibration_dataset.py`는 데이터 준비·특징 캐시,
+`vibration_engine.py`는 통계·Isolation Forest·이상 이력, `vibration_workflow.py`는 학습·평가 절차,
+`vibration_dashboard.py`는 화면, `vibration_report.py`는 수치를 그대로 옮기는 보고서를 담당합니다.
+각 파일의 docstring과 주석에 계산 목적과 주의할 데이터 분리를 설명했습니다.
+
+기본 보고서는 API 없이 작성합니다. 화면에서 생성형 AI 옵션을 선택하고 보고서 버튼을 누르면
+기존 Claude 기능으로 문장을 작성합니다. AI에는 평가 정답 라벨을 전달하지 않으며,
+통계·머신러닝 엔진이 계산한 판정과 근거를 그대로 설명하도록 합니다.
+
+테스트는 `python -m pytest -q`로 실행합니다. 외부 정상 기준, 처음부터 높은 특징값,
+중간 이상 후 정상 복귀, 순간 초과 제외, 라벨 누수 방지, 최종 평가의 재학습 금지,
+캐시 무효화, 보고서 시간·측정값 전달 등을 검사합니다.
+
+---
+
+
+## Paderborn 진동 확인 (추가된 기능)
+
+대시보드의 **Paderborn 진동 확인**에서 원본 신호, 구간별 RMS·첨도·최대/최소 차이·파고율,
+같은 운전 조건의 기록 비교표와 CSV/JSON 다운로드를 확인할 수 있습니다.
+**기존 CSV 진단**은 사이드바의 분석 종류에서 선택합니다.
+
+1. 원래 이름을 유지한 MAT 파일과 설명 PDF를 `data/paderborn/raw/`에 둡니다.
+2. 의존성을 설치하고 대시보드를 실행합니다.
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+터미널에서 실제 파일 구조와 특징을 확인하려면:
+
+```powershell
+.\.venv\Scripts\python.exe inspect_paderborn.py
+```
+
+출력은 `data/paderborn/derived/inspection_summary.json`과 `window_features.csv`입니다.
+기본 구간은 0.25초, 이동 간격은 0.125초이며 검증으로 확정한 탐지 설정이 아닙니다.
+실제 시간축을 사용하고 마지막 짧은 구간도 포함합니다. 각 구간의 평균을 제거한 뒤
+RMS를 계산하며, 첨도는 Pearson 정의(m4/m2²)를 사용합니다. 진폭 정규화는 하지 않습니다.
+
+원신호 확인 화면에 먼저 등록한 3개 파일은 `N09_M07_F10`(900rpm, 0.7Nm, 반경 방향 하중 1,000N) 조건의
+K001·KA04·KI04입니다. 진동 채널은 `vibration_1`이며, 채널의 `XIndex`로 시간축을 찾습니다.
+이 파일들은 진동 단위 정보가 비어 있어 원본 수치를 보존하고, g로 간주하거나 변환하지 않습니다.
+
+이 원신호 확인 화면은 **신호·특징 확인 단계**입니다. 파일명의 제공 라벨은 프로그램의 판정이 아니며,
+원인 진단·경고 임계값·탐지 정확도를 산출하지 않습니다. 이번 샘플은 정상 K001의 RMS가
+두 손상 파일보다 높으므로 'RMS가 높으면 손상'이라는 규칙의 타당성을 보여주지 않습니다.
+새 비교 분석 기능에서는 별도 정상 기준과 데이터 분리로 경고 기준을 실험합니다.
+같은 베어링의 기록이나 구간을 서로 다른 평가 집합에 섞지 않습니다.
+
+데이터 원본과 재생성 가능한 추출 결과는 Git에서 제외합니다. 공식 자료:
+https://mb.uni-paderborn.de/en/kat/research/bearing-datacenter
+
+---
+
+## 기존 CSV 진단 기능
+
+아래는 기존 CSV 전용 엔진의 설명입니다. 위의 Paderborn 비교 분석과는 별도입니다.
 모터 센서 데이터(온도·진동·전류·RPM)를 분석해 **위험 점수**를 계산하고,
 설비 상태를 **정상 / 주의 / 위험**으로 분류하는 **규칙 기반(rule-based) 진단 엔진**입니다.
 진단 결과를 바탕으로 생성형 AI(Anthropic Claude)가 사람이 읽기 좋은 **진단 보고서**를 자연어로 작성합니다.

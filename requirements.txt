@@ -3,6 +3,9 @@
 
 pandas>=2.0        # CSV 로드 및 시계열 처리
 numpy>=1.24        # 수치 계산 (점수 clip 등)
+scipy>=1.10        # Paderborn MATLAB 파일 읽기
+scikit-learn>=1.4,<2  # 정상 기록으로 학습하는 Isolation Forest
+joblib>=1.3        # 이 프로젝트에서 학습한 비교 모델 저장
 pyyaml>=6.0        # config(risk_thresholds.yaml) 로드
 pytest>=8.0        # 단위 테스트
 streamlit>=1.30    # 진단 대시보드 (app.py)

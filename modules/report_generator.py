@@ -82,14 +82,28 @@ SYSTEM_PROMPT = """당신은 산업 설비(모터) 진단 보고서를 작성하
    - recommended_checks를 우선순위 있게, 실행 가능한 문장으로.
 """
 
+VIBRATION_SYSTEM_PROMPT = """당신은 베어링 진동 기록의 점검 보고서를 한국어로 작성합니다.
+제공된 통계 방식과 Isolation Forest의 결과를 각각 그대로 설명하세요.
+전체 기록의 이상 이력과 마지막 구간 상태를 구분하고, 이상 시간·점수·경계·측정값을 인용하세요.
+통계 특징 경계를 Isolation Forest의 특징 중요도로 해석하지 마세요.
+점수를 고장 확률로 표현하거나, 손상 위치·원인·안전성·장비 정지 필요성을 새로 확정하지 마세요.
+숫자와 판정을 바꾸지 말고, 제공되지 않은 정확도나 성능 개선을 만들지 마세요.
+보고서는 기록 요약, 방식별 결과와 이상 구간, 비교 근거, 점검 시 확인할 사항, 분석 범위 순서로 작성하세요.
+"""
+
 
 def build_user_prompt(result: Dict[str, Any]) -> str:
     """진단 결과 JSON을 AI에게 전달할 사용자 메시지로 구성한다."""
+    description = "아래는 규칙 기반 진단 엔진이 산출한 모터 진단 결과입니다. "
+    if result.get("analysis_type") == "vibration_comparison":
+        from modules.vibration_report import report_payload
+
+        result = report_payload(result)
+        description = "아래는 통계 방식과 Isolation Forest가 산출한 베어링 진동 비교 결과입니다. "
     result_json = json.dumps(result, ensure_ascii=False, indent=2)
     return (
-        "아래는 규칙 기반 진단 엔진이 산출한 모터 진단 결과입니다. "
-        "이 결과를 근거로 진단 보고서를 작성해 주세요.\n\n"
-        f"```json\n{result_json}\n```"
+        description + "이 결과를 근거로 진단 보고서를 작성해 주세요.\n\n"
+        + f"```json\n{result_json}\n```"
     )
 
 
@@ -99,6 +113,11 @@ def generate_template_report(result: Dict[str, Any]) -> str:
     LLM 없이 result.json의 값을 그대로 채워 넣어 최소한의 보고서를 만든다.
     => 어떤 환경에서도 시스템이 끝까지 동작하도록 하는 fallback.
     """
+    if result.get("analysis_type") == "vibration_comparison":
+        from modules.vibration_report import generate_vibration_template_report
+
+        return generate_vibration_template_report(result)
+
     checks = result.get("recommended_checks", [])
     checks_text = "\n".join(f"- {c}" for c in checks) if checks else "- 즉각적인 조치 필요 없음"
 
@@ -150,7 +169,8 @@ def generate_report(result: Dict[str, Any]) -> str:
         response = client.messages.create(
             model=MODEL,
             max_tokens=4000,
-            system=SYSTEM_PROMPT,
+            system=(VIBRATION_SYSTEM_PROMPT if result.get("analysis_type") == "vibration_comparison"
+                    else SYSTEM_PROMPT),
             messages=[
                 {"role": "user", "content": build_user_prompt(result)},
             ],
