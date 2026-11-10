@@ -21,6 +21,7 @@ import streamlit as st
 
 from modules.risk_engine import RiskEngine
 from modules.report_generator import generate_report
+from modules.ui_state import remembered_selectbox
 
 BASE_DIR = Path(__file__).resolve().parent
 CONFIG_PATH = str(BASE_DIR / "config" / "risk_thresholds.yaml")
@@ -165,7 +166,9 @@ def render_paderborn_inspection() -> None:
     if not paths:
         st.info("MAT 파일을 data/paderborn/raw/ 폴더에 원래 이름으로 넣어 주세요.")
         return
-    choice = st.sidebar.selectbox("확인할 MAT 파일", paths, format_func=lambda path: path.name)
+    by_file = {path.name: path for path in paths}
+    selected_file = remembered_selectbox("확인할 MAT 파일", list(by_file), "vibration_inspection_file")
+    choice = by_file[selected_file]
     with st.sidebar.expander("분석 구간 설정"):
         window_sec = st.number_input("구간 길이 (초)", min_value=0.05, max_value=2.0,
                                      value=0.25, step=0.05)

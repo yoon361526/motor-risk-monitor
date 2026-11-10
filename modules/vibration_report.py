@@ -24,27 +24,38 @@ def generate_vibration_template_report(result: dict) -> str:
     training = result["training"]
     lines = [
         "## 진동 기록 분석 보고서",
+        f"- 분석 모델: {result.get('model_name', '정상 참조 비교 모델')}",
+        f"- 모델 식별값: `{result['model_id']}`",
         f"- 기록: `{record['file']}`",
         f"- 운전 조건: `{record['condition']}`",
         f"- 측정 길이: {record['duration_sec']:.6f}초",
         f"- 진동 단위: {record.get('unit') or '미확인 — 원본 수치 사용'}",
         f"- 정상 기준 베어링: {', '.join(training['reference_bearings'])}",
-        f"- 경계 설정용 정상 베어링: {', '.join(training['calibration_bearings'])}",
+        f"- 경고 기준 설정용 정상 베어링: {', '.join(training['calibration_bearings'])}",
         f"- 분석 구간: {settings['window_sec']:g}초 / 이동: {settings['hop_sec']:g}초",
         f"- 경고 조건: {settings['minimum_consecutive_windows']}개 구간 연속 초과",
         "",
         "## 방식별 결과와 이상 이력",
     ]
+    quality = record.get("quality_summary")
+    if quality:
+        position = lines.index("## 방식별 결과와 이상 이력")
+        lines[position:position] = [
+            f"- 구간 품질: 전체 {quality['original_window_count']}개 / "
+            f"분석 {quality['usable_window_count']}개 / 제외 {quality['excluded_window_count']}개",
+            "- 선택 특징: " + ", ".join(row["label"] for row in result["statistical_reference"]), "",
+        ]
     for method in result["methods"].values():
         history = "이상 이력 있음" if method["record_has_alert"] else "이상 이력 없음"
-        latest = "경고" if method["last_window_confirmed_alert"] else "경고 없음"
+        latest = ("분석 제외" if not method.get("last_window_available", True) else
+                  "경고" if method["last_window_confirmed_alert"] else "경고 없음")
         lines += [f"### {method['name']}", f"- 전체 기록: **{history}**",
                   f"- 마지막 구간: **{latest}**",
-                  f"- 기록 점수: {method['record_score']:.6g} / 비교 경계: {method['threshold']:.6g}"]
+                  f"- 기록 점수: {method['record_score']:.6g} / 경고 기준값: {method['threshold']:.6g}"]
         for index, event in enumerate(method["events"], 1):
             lines += [
                 f"- 이상 구간 {index}: **{event['start_sec']:.6f}~{event['end_sec']:.6f}초**",
-                f"  - 최고 구간 점수: {event['peak_score']:.6g} / 경계: {event['threshold']:.6g}",
+                f"  - 최고 구간 점수: {event['peak_score']:.6g} / 경고 기준값: {event['threshold']:.6g}",
                 "  - 최고 점수 구간의 측정값: " + ", ".join(
                     f"{name}={value:.6g}" for name, value in event["peak_features"].items()),
             ]
@@ -62,5 +73,13 @@ def generate_vibration_template_report(result: dict) -> str:
               "", "## 분석 범위"]
     lines += [f"- {note}" for note in result.get("notes", [])]
     lines += [f"- {warning}" for warning in record.get("warnings", [])]
+    if record.get("excluded_windows"):
+        lines += ["", "## 품질 검사로 제외한 구간", "| 시작 (초) | 끝 (초) | 제외 사유 |",
+                  "|---:|---:|---|"]
+        reasons = {"time_gap": "시간 공백", "local_sample_rate": "국소 샘플링 속도",
+                   "undefined_base_feature": "특징 정의 불가", "short_window": "샘플 부족"}
+        for row in record["excluded_windows"]:
+            lines.append(f"| {row['start_sec']:.6f} | {row['end_sec']:.6f} | "
+                         f"{reasons.get(row['reason'], row['reason'])} |")
     lines += ["", "_분석 엔진의 결과를 그대로 옮긴 템플릿 보고서입니다._"]
     return "\n".join(lines)

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from functools import partial
 from pathlib import Path
 import tempfile
 
@@ -10,10 +11,11 @@ import pandas as pd
 import streamlit as st
 
 from modules.report_generator import generate_report
-from modules.vibration_config import FEATURE_LABELS, load_vibration_config
-from modules.vibration_dataset import comparison_dir, load_manifest, read_windowed_record
+from modules.ui_state import remembered_radio, remembered_selectbox
+from modules.vibration_config import load_vibration_config
+from modules.vibration_dataset import load_manifest
 from modules.vibration_report import generate_vibration_template_report
-from modules.vibration_workflow import load_engine
+from modules.vibration_selected_model import load_selected_engine, read_selected_record
 
 
 def _rate(value: float | None) -> str:
@@ -35,15 +37,24 @@ def _render_metrics(folder: Path, model_id: str) -> None:
                 rows.append({"판정 방식": metric["name"],
                              "오경보율": _rate(metric["false_positive_rate"]),
                              "미탐률": _rate(metric["miss_rate"]),
+                             "손상 탐지율": _rate(metric["tp"] / (metric["tp"] + metric["fn"])
+                                                if metric["tp"] + metric["fn"] else None),
                              "정상 무경고(TN)": metric["tn"], "정상 경고(FP)": metric["fp"],
                              "손상 미탐(FN)": metric["fn"], "손상 탐지(TP)": metric["tp"]})
             st.dataframe(pd.DataFrame(rows), hide_index=True)
             st.caption(f"기록 {report['record_count']}개 / 베어링 {report['bearing_count']}개. "
                        "연속 초과 구간이 하나 이상 있으면 해당 기록을 경고로 집계합니다.")
             st.caption("설정 조정용 결과는 최종 성능이 아닙니다. 중첩 구간은 독립 평가 표본으로 세지 않았습니다.")
+            detail = []
+            for metric in report["metrics"].values():
+                for bearing, counts in metric["by_bearing"].items():
+                    detail.append({"판정 방식": metric["name"], "베어링": bearing,
+                                   "기록 수": counts["record_count"],
+                                   "경고 기록 수": counts["alert_record_count"]})
+            st.dataframe(pd.DataFrame(detail), hide_index=True)
 
 
-def _read_upload(uploaded, data_root: Path, config):
+def _read_upload(uploaded, data_root: Path, config, read_record):
     """업로드한 MAT만 임시 저장한다. 평가용 베어링은 분석 전에 차단한다."""
     name = uploaded.name
     if Path(name).name != name:
@@ -58,31 +69,37 @@ def _read_upload(uploaded, data_root: Path, config):
             raise ValueError("임시 업로드 경로가 데이터 폴더를 벗어났습니다.")
         path = temporary / name
         path.write_bytes(uploaded.getvalue())
-        return read_windowed_record(path, config)
+        return read_record(path)
 
 
 def render_vibration_comparison(base_dir: Path) -> None:
     st.header("베어링 진동 비교 분석")
     st.caption("별도 정상 기록을 기준으로 통계 방식과 Isolation Forest를 비교합니다.")
     data_root = base_dir / "data" / "paderborn"
-    folder = comparison_dir(data_root)
+    model_name = "개선 모델 · 선택 특징 4개"
     try:
         config = load_vibration_config(base_dir / "config" / "vibration_analysis.yaml")
         manifest = load_manifest(data_root, config)
-        engine = load_engine(data_root, config)
+        engine, folder = load_selected_engine(data_root, config)
+        read_record = partial(read_selected_record, engine=engine, cache_dir=folder / "features")
+        feature_names, feature_labels = engine.feature_names, engine.feature_labels
     except (ValueError, OSError) as error:
         st.info(str(error))
-        st.code(".\\.venv\\Scripts\\python.exe run_vibration_analysis.py prepare\n"
-                ".\\.venv\\Scripts\\python.exe run_vibration_analysis.py train", language="powershell")
+        st.code(".\\.venv\\Scripts\\python.exe activate_selected_model.py", language="powershell")
         return
 
+    st.caption(f"현재 분석 모델: {model_name}")
+    st.caption("사용 특징: " + " · ".join(feature_labels[name] for name in feature_names))
     _render_metrics(folder, engine.model_id)
-    source = st.sidebar.radio("비교할 기록", ["설정 조정용 기록", "새 MAT 업로드"])
+    source = remembered_radio("비교할 기록", ["설정 조정용 기록", "새 MAT 업로드"],
+                              "vibration_comparison_source")
     try:
         if source == "설정 조정용 기록":
             entries = [entry for entry in manifest["records"] if entry["split"] == "tuning"]
-            entry = st.sidebar.selectbox("MAT 기록", entries, format_func=lambda item: item["file"])
-            record = read_windowed_record(data_root / entry["relative_path"], config, folder / "features")
+            by_file = {entry["file"]: entry for entry in entries}
+            selected_file = remembered_selectbox("MAT 기록", list(by_file), "vibration_comparison_file")
+            entry = by_file[selected_file]
+            record = read_record(data_root / entry["relative_path"])
             if record.metadata["source_sha256"] != entry["sha256"]:
                 raise ValueError("준비 이후 원본 기록이 변경됐습니다. prepare를 다시 실행해 주세요.")
         else:
@@ -90,8 +107,9 @@ def render_vibration_comparison(base_dir: Path) -> None:
             if uploaded is None:
                 st.info("같은 운전 조건의 MAT 기록을 선택해 주세요.")
                 return
-            record = _read_upload(uploaded, data_root, config)
+            record = _read_upload(uploaded, data_root, config, read_record)
         result = engine.analyze(record)
+        result["model_name"] = model_name
     except (ValueError, OSError) as error:
         st.error(str(error))
         return
@@ -99,34 +117,55 @@ def render_vibration_comparison(base_dir: Path) -> None:
     meta = result["record"]
     st.caption(f"{meta['file']} · {meta['condition']} · {meta['duration_sec']:.3f}초")
     st.info("점수는 고장 확률이 아닙니다. '경고 없음'은 설정한 기준에서 이상 이력을 찾지 못했다는 뜻입니다.")
-    tabs = st.tabs([method["name"] for method in result["methods"].values()])
-    for tab, method in zip(tabs, result["methods"].values()):
+    if meta.get("excluded_windows"):
+        quality = meta["quality_summary"]
+        st.warning(f"전체 {quality['original_window_count']}개 구간 중 "
+                   f"{quality['excluded_window_count']}개를 품질 검사로 제외했습니다. "
+                   "아래 결과는 분석 가능한 구간에서의 결과입니다.")
+        with st.expander("품질 검사로 제외한 구간"):
+            excluded = pd.DataFrame(meta["excluded_windows"])
+            excluded["reason"] = excluded["reason"].replace({
+                "time_gap": "시간 공백", "local_sample_rate": "국소 샘플링 속도",
+                "undefined_base_feature": "특징 정의 불가", "short_window": "샘플 부족"})
+            st.dataframe(excluded.rename(columns={"window_id": "구간 번호", "start_sec": "시작 (초)",
+                                                  "end_sec": "끝 (초)", "reason": "제외 사유"}), hide_index=True)
+    # 개선 모델에서는 사용자가 기본으로 머신러닝 분석 결과를 보게 한다.
+    order = ("isolation_forest", "statistics")
+    methods = [result["methods"][name] for name in order]
+    tabs = st.tabs([method["name"] for method in methods])
+    for tab, method in zip(tabs, methods):
         with tab:
             history, latest, count = st.columns(3)
             history.metric("전체 기록", "이상 이력 있음" if method["record_has_alert"] else "이상 이력 없음")
-            latest.metric("마지막 구간", "경고" if method["last_window_confirmed_alert"] else "경고 없음")
+            last_status = ("분석 제외" if not method.get("last_window_available", True) else
+                           "경고" if method["last_window_confirmed_alert"] else "경고 없음")
+            latest.metric("마지막 구간", last_status)
             count.metric("이상 구간", len(method["events"]))
             windows = pd.DataFrame(method["windows"])
             chart = pd.DataFrame({"이상도": windows["anomaly_score"].to_numpy(),
-                                  "비교 경계": method["threshold"]},
+                                  "경고 기준값": method["threshold"]},
                                  index=pd.Index(windows["start_sec"], name="구간 시작 (초)"))
             st.line_chart(chart, height=240)
-            st.caption(f"기록 점수 {method['record_score']:.6g} / 경계 {method['threshold']:.6g} · "
+            st.caption(f"기록 점수 {method['record_score']:.6g} / 경고 기준값 {method['threshold']:.6g} · "
                        f"{config.minimum_consecutive_windows}개 구간 연속 초과 시 경고")
             if method["events"]:
                 events = pd.DataFrame(method["events"])[["start_sec", "end_sec", "window_count", "peak_score", "threshold"]]
                 st.dataframe(events.rename(columns={"start_sec": "시작 (초)", "end_sec": "끝 (초)",
-                             "window_count": "구간 수", "peak_score": "최고 점수", "threshold": "경계"}), hide_index=True)
+                             "window_count": "구간 수", "peak_score": "최고 점수", "threshold": "경고 기준값"}), hide_index=True)
             with st.expander("구간별 수치와 판정"):
                 st.dataframe(windows, hide_index=True)
 
     with st.expander("정상 기준과 추출 특징"):
         st.caption("이 표는 통계 방식의 특징 경계입니다. Isolation Forest의 특징 기여도는 아닙니다.")
-        st.dataframe(pd.DataFrame(result["statistical_reference"]), hide_index=True)
+        reference = pd.DataFrame(result["statistical_reference"])[
+            ["label", "center", "robust_scale", "lower_bound", "upper_bound"]]
+        st.dataframe(reference.rename(columns={"label": "특징", "center": "정상 기준 중앙값",
+                                               "robust_scale": "정상 변동 척도", "lower_bound": "참고 하한",
+                                               "upper_bound": "참고 상한"}), hide_index=True)
         columns = st.columns(2)
-        for index, name in enumerate(config.features):
+        for index, name in enumerate(feature_names):
             with columns[index % 2]:
-                st.caption(FEATURE_LABELS[name])
+                st.caption(feature_labels[name])
                 st.line_chart(record.features.set_index("start_sec")[[name]], height=150)
         for warning in meta["warnings"]:
             st.warning(warning)

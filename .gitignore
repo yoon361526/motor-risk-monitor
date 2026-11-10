@@ -52,3 +52,7 @@ desktop.ini
 # Paderborn 원본과 재생성 가능한 특징 추출 결과
 data/paderborn/raw/
 data/paderborn/derived/
+
+# 개인 제출용 텍스트 보고서와 원본 확인·보관 자료는 로컬에 유지한다.
+/docs/*-report-draft.txt
+/docs/report-assets/

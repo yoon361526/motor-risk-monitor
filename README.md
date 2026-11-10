@@ -7,6 +7,34 @@
 두 방식의 결과를 각각 표시하고, 이상 구간 이력과 점검 보고서를 저장합니다.
 현재 기능은 측정 기록의 오프라인 분석이며, 산업 설비의 실시간 보호 기능이 아닙니다.
 
+**현재 대시보드는 선택 특징 4개를 사용하는 개선 모델로 분석합니다.** 특징은
+0–1 kHz 에너지 비율, 12–16 kHz 에너지 비율, 엔벨로프 최대 에너지 비율, Pearson 첨도입니다.
+기존 시간 특징 모델은 비교 근거로 보존하며 대시보드 선택 메뉴에는 노출하지 않습니다.
+
+전체 기능과 실제 실행 화면을 중심으로 정리한 [구현 결과보고서 초안](docs/implementation-report-draft.md)과
+화면 캡처는 `docs/screenshots/`에 있습니다.
+
+### 특징 보완 비교 실험
+
+기존 모델을 보존하고 주파수·엔벨로프 특징 조합을 개발용 데이터에서 비교하려면:
+
+```powershell
+.\.venv\Scripts\python.exe run_feature_experiment.py
+```
+
+최종 평가 신호는 읽지 않으며 결과를 대시보드에 자동 적용하지 않습니다.
+계산 조건, 결과와 한계는 [특징 비교 실험 문서](docs/feature-experiment.md)에 있습니다.
+
+추출한 특징 중 소수의 조합을 선택하는 후속 개발 실험은 다음 명령으로 실행합니다.
+
+```powershell
+.\.venv\Scripts\python.exe run_feature_selection.py
+```
+
+최대 23개 조합을 비교하고, 특징 분포 그래프와 난수 시드 민감도도 저장합니다.
+모델은 정상만으로 학습하지만 특징 선택에는 개발 손상 라벨을 참고합니다.
+실행 방법과 개발 결과는 [특징 선택 실험 문서](docs/feature-selection.md)에 있습니다.
+
 ### 실행
 
 ```powershell
@@ -19,6 +47,11 @@
 # 정상 기준 학습, 정상 경계 설정, 설정 조정용 결과 저장
 .\.venv\Scripts\python.exe run_vibration_analysis.py train
 
+# 최초 구축 시 특징 비교·선택 실험과 대시보드 모델 활성화
+.\.venv\Scripts\python.exe run_feature_experiment.py
+.\.venv\Scripts\python.exe run_feature_selection.py
+.\.venv\Scripts\python.exe activate_selected_model.py
+
 # 대시보드에서 'Paderborn 비교 분석' 선택
 .\.venv\Scripts\python.exe -m streamlit run app.py
 ```
@@ -26,6 +59,11 @@
 다른 다운로드 폴더는 `prepare --archive-dir "D:\\datasets"`로 지정할 수 있습니다.
 Windows 기본 `tar`로 RAR을 읽습니다. 다른 OS에서는 RAR을 지원하는 bsdtar가 필요합니다.
 기존 원본은 그대로 두며, 다른 내용의 파일이 이미 있으면 덮어쓰지 않고 중단합니다.
+
+이미 데이터·선택 실험·개선 모델이 준비된 현재 작업 폴더에서는 대시보드 실행만 하면 됩니다.
+`activate_selected_model.py`는 재학습 없이 선택 모델과 경고 기준값을 가져오고, 개발용 80개를
+실제 입력 경로로 재검증한 다음 활성화합니다. 실험 파일이나 기존 모델은 덮어쓰지 않습니다.
+전처리는 실험과 같은 시간축 보간·품질 제외를 사용하며, 제외 구간을 넘어 경고를 연결하지 않습니다.
 
 ### 데이터 분리와 평가
 
@@ -46,7 +84,8 @@ Windows 기본 `tar`로 RAR을 읽습니다. 다른 OS에서는 RAR을 지원하
 경고 경계는 tuning 중 **정상 기록만** 사용해 정합니다. 손상 라벨은 학습 입력에 넣지 않습니다.
 이후 tuning의 정상·손상 기록으로 오경보율·미탐률을 보여 줍니다. 이 결과는 최종 성능이 아닙니다.
 
-분석 방식과 설정을 확정한 뒤 다음 명령으로 최종 평가합니다.
+최종 평가용 80개는 보존 중입니다. 아래 명령은 **기존 시간 특징 모델 전용**이며,
+현재 대시보드 개선 모델의 최종 평가 명령으로 사용하지 않습니다.
 
 ```powershell
 .\.venv\Scripts\python.exe run_vibration_analysis.py evaluate
@@ -56,7 +95,8 @@ Windows 기본 `tar`로 RAR을 읽습니다. 다른 OS에서는 RAR을 지원하
 최종 평가 결과를 확인한 뒤 설정을 변경하면 같은 자료를 새로운 미공개 평가로 취급할 수 없습니다.
 대시보드의 기본 파일 목록은 tuning만 포함하며, 평가용 베어링의 개별 업로드·수동 분석은 제한합니다.
 
-단일 기록 분석과 JSON·템플릿 보고서 저장은 다음과 같습니다.
+기존 시간 특징 모델의 단일 기록 CLI 분석과 JSON·템플릿 보고서 저장은 다음과 같습니다.
+현재 개선 모델의 개별 분석·보고서 작성은 대시보드에서 수행합니다.
 
 ```powershell
 .\.venv\Scripts\python.exe run_vibration_analysis.py analyze data/paderborn/raw/tuning/N09_M07_F10_KA04_1.mat
@@ -64,7 +104,8 @@ Windows 기본 `tar`로 RAR을 읽습니다. 다른 OS에서는 RAR을 지원하
 
 ### 점수와 이상 이력의 의미
 
-- 특징: 구간 평균을 제거한 RMS, Pearson 첨도, 최대·최소 차이, 파고율.
+- 대시보드 특징: 0–1 kHz 에너지 비율, 12–16 kHz 에너지 비율, 엔벨로프 최대 에너지 비율, Pearson 첨도.
+  원신호 확인 화면과 기존 모델 CLI의 네 시간 특징은 별도입니다.
 - 통계 방식: 정상 특징의 중앙값과 `1.4826 × MAD`를 사용한 절대 편차 중 최댓값.
   MAD가 0에 가까우면 작은 양의 바닥값을 사용해 0 나눗셈을 막습니다.
 - 머신러닝 방식: Isolation Forest의 `-score_samples`. 큰 값이 더 이상한 방향입니다.
@@ -83,7 +124,10 @@ Windows 기본 `tar`로 RAR을 읽습니다. 다른 OS에서는 RAR을 지원하
 
 ### 결과와 코드 위치
 
-결과는 `data/paderborn/derived/comparison/`에 저장됩니다.
+현재 대시보드 모델과 결과는 `data/paderborn/derived/deployed/<모델 식별값>/`에 저장됩니다.
+`active_selected_model.json`이 사용할 모델을 가리키며 `engine.joblib`, 모델 메타데이터,
+개발 지표, 분석 JSON·보고서, 특징 캐시를 별도로 보관합니다.
+기존 모델과 결과는 `data/paderborn/derived/comparison/`에 보존합니다.
 
 - `dataset_manifest.json`: 용도별 원본 목록과 SHA-256. 특징 캐시도 원본 해시와 추출 설정을 사용합니다.
 - `models.joblib`, `model_metadata.json`: 이 프로젝트에서 학습한 두 모델, 설정, 기준·경계 설정 원본 정보.
@@ -95,6 +139,8 @@ Windows 기본 `tar`로 RAR을 읽습니다. 다른 OS에서는 RAR을 지원하
 `vibration_engine.py`는 통계·Isolation Forest·이상 이력, `vibration_workflow.py`는 학습·평가 절차,
 `vibration_dashboard.py`는 화면, `vibration_report.py`는 수치를 그대로 옮기는 보고서를 담당합니다.
 각 파일의 docstring과 주석에 계산 목적과 주의할 데이터 분리를 설명했습니다.
+`vibration_selected_model.py`는 선택 모델의 추론·동일 전처리·품질 제외를 처리하고,
+`vibration_deployment.py`는 실험 결과 재검증과 대시보드 모델 활성화를 담당합니다.
 
 기본 보고서는 API 없이 작성합니다. 화면에서 생성형 AI 옵션을 선택하고 보고서 버튼을 누르면
 기존 Claude 기능으로 문장을 작성합니다. AI에는 평가 정답 라벨을 전달하지 않으며,
