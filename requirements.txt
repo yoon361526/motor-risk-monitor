@@ -1,11 +1,11 @@
 # 모터 이상징후 진단 엔진 의존성
 # 설치:  py -m pip install -r requirements.txt
 
-pandas>=2.0        # CSV 로드 및 시계열 처리
-numpy>=1.24        # 수치 계산 (점수 clip 등)
-scipy>=1.10        # Paderborn MATLAB 파일 읽기
-scikit-learn>=1.4,<2  # 정상 기록으로 학습하는 Isolation Forest
-joblib>=1.3        # 이 프로젝트에서 학습한 비교 모델 저장
+pandas==3.0.5      # 배포 모델을 검증한 실행 환경
+numpy==2.5.2       # 모델 메타데이터의 실행 버전과 일치해야 한다.
+scipy==1.18.1      # Paderborn MATLAB 파일 읽기
+scikit-learn==1.9.1  # 학습된 Isolation Forest와 같은 버전 사용
+joblib==1.6.0      # 이 프로젝트에서 학습한 비교 모델 저장
 matplotlib>=3.8,<4 # 특징 선택 실험의 오프라인 분포 그래프 저장
 pyyaml>=6.0        # config(risk_thresholds.yaml) 로드
 pytest>=8.0        # 단위 테스트

@@ -1,0 +1,6 @@
+# 모델의 코드 해시 검증은 운영체제와 관계없이 같은 LF 바이트를 사용한다.
+*.py text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.mat binary
+*.joblib binary

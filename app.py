@@ -164,6 +164,19 @@ def render_paderborn_inspection() -> None:
     st.info("현재는 신호·특징 확인 단계입니다. '제공 상태'는 데이터셋의 라벨이며, 프로그램의 이상 판정이 아닙니다.")
     paths = sorted((DATA_DIR / "paderborn" / "raw").glob("*.mat"))
     if not paths:
+        from modules.vibration_config import load_vibration_config
+        from modules.vibration_dataset import available_tuning_records, load_manifest
+
+        data_root = DATA_DIR / "paderborn"
+        try:
+            config = load_vibration_config(BASE_DIR / "config" / "vibration_analysis.yaml")
+            manifest = load_manifest(data_root, config)
+            paths = [data_root / entry["relative_path"]
+                     for entry in available_tuning_records(data_root, manifest)]
+        except (ValueError, OSError) as error:
+            st.info(str(error))
+            return
+    if not paths:
         st.info("MAT 파일을 data/paderborn/raw/ 폴더에 원래 이름으로 넣어 주세요.")
         return
     by_file = {path.name: path for path in paths}

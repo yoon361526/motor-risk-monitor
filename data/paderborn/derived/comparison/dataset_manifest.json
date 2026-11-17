@@ -1,0 +1,2040 @@
+{
+  "schema_version": 1,
+  "config_fingerprint": "b6f23ae99ca63c2ac7afc3806ccb9b2f7bc9e0bd7fb2435c900f747c08dd46d9",
+  "config": {
+    "condition": "N09_M07_F10",
+    "records_per_bearing": 20,
+    "window_sec": 0.25,
+    "hop_sec": 0.125,
+    "features": [
+      "rms_centered",
+      "kurtosis_pearson",
+      "peak_to_peak",
+      "crest_factor"
+    ],
+    "minimum_consecutive_windows": 3,
+    "calibration_quantile": 0.95,
+    "n_estimators": 200,
+    "random_state": 42,
+    "splits": {
+      "reference": [
+        "K001",
+        "K002"
+      ],
+      "tuning": [
+        "K003",
+        "K004",
+        "KA04",
+        "KI04"
+      ],
+      "evaluation": [
+        "K005",
+        "K006",
+        "KA15",
+        "KI14"
+      ]
+    }
+  },
+  "records": [
+    {
+      "file": "N09_M07_F10_K001_1.mat",
+      "bearing_id": "K001",
+      "record_number": 1,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_1.mat",
+      "sha256": "c55f4c6a5d6d9a83d18d24dce4f164ffc85721e4e358df1c1ac9886583c2269f"
+    },
+    {
+      "file": "N09_M07_F10_K001_2.mat",
+      "bearing_id": "K001",
+      "record_number": 2,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_2.mat",
+      "sha256": "353451b91afc757be1883b4af2ba36724d58534a24b310662be7cd93dba156bb"
+    },
+    {
+      "file": "N09_M07_F10_K001_3.mat",
+      "bearing_id": "K001",
+      "record_number": 3,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_3.mat",
+      "sha256": "6c4d86af80479b864b57966669574a00b218370b1e75f75411bbc50599e60dd3"
+    },
+    {
+      "file": "N09_M07_F10_K001_4.mat",
+      "bearing_id": "K001",
+      "record_number": 4,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_4.mat",
+      "sha256": "8396cebc4fe63ee49b4282ae6e4f6989ed5f9fdd65dcec9b89c13a6ff4ab201e"
+    },
+    {
+      "file": "N09_M07_F10_K001_5.mat",
+      "bearing_id": "K001",
+      "record_number": 5,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_5.mat",
+      "sha256": "44c8d4df1c288ba321c10795122da1cacb37471302aa41183b131f655d90088d"
+    },
+    {
+      "file": "N09_M07_F10_K001_6.mat",
+      "bearing_id": "K001",
+      "record_number": 6,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_6.mat",
+      "sha256": "b92664766ba37c9bde910207ad65ce8bc08ee3d3978133fe75793e69563d08e6"
+    },
+    {
+      "file": "N09_M07_F10_K001_7.mat",
+      "bearing_id": "K001",
+      "record_number": 7,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_7.mat",
+      "sha256": "780298e958182f42edf581af01184208e8069a56e32e46ec0d3ceb621b772760"
+    },
+    {
+      "file": "N09_M07_F10_K001_8.mat",
+      "bearing_id": "K001",
+      "record_number": 8,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_8.mat",
+      "sha256": "477499b31da6fa82a8a7f9a9a0af6365be4dbf2c0b60c6a6293549eb56f72cb9"
+    },
+    {
+      "file": "N09_M07_F10_K001_9.mat",
+      "bearing_id": "K001",
+      "record_number": 9,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_9.mat",
+      "sha256": "d805b827dc2fad6168a30caf68d25d2ee93b9cfb78fc4b38c95184f4db11dc0d"
+    },
+    {
+      "file": "N09_M07_F10_K001_10.mat",
+      "bearing_id": "K001",
+      "record_number": 10,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_10.mat",
+      "sha256": "048fca3a6d4942eeb42e16108801af0ee88486951a10a24458f59cf7c0865c3b"
+    },
+    {
+      "file": "N09_M07_F10_K001_11.mat",
+      "bearing_id": "K001",
+      "record_number": 11,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_11.mat",
+      "sha256": "9c6f9ca0fe8886a2a8118abd6d854e3696863c9882867e56fdac37f7ab1cdcdc"
+    },
+    {
+      "file": "N09_M07_F10_K001_12.mat",
+      "bearing_id": "K001",
+      "record_number": 12,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_12.mat",
+      "sha256": "74e0a9f88da4deb8732747600070b5e323944ebc14dcad3a1f6bad84f5bcc531"
+    },
+    {
+      "file": "N09_M07_F10_K001_13.mat",
+      "bearing_id": "K001",
+      "record_number": 13,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_13.mat",
+      "sha256": "11c369eb0688536e8835eb3c2f80b233de270bd29e0145ecf2e60fbd04a6b83f"
+    },
+    {
+      "file": "N09_M07_F10_K001_14.mat",
+      "bearing_id": "K001",
+      "record_number": 14,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_14.mat",
+      "sha256": "49eae59140b37ca1a047fe9dc84485d14129adc18a5669329e4bd11faa418aef"
+    },
+    {
+      "file": "N09_M07_F10_K001_15.mat",
+      "bearing_id": "K001",
+      "record_number": 15,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_15.mat",
+      "sha256": "619f41c2167c02b85490d83b91adf60f2b2167ac4124a863d16f6b108c49ab29"
+    },
+    {
+      "file": "N09_M07_F10_K001_16.mat",
+      "bearing_id": "K001",
+      "record_number": 16,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_16.mat",
+      "sha256": "5c344ac7ff97e8c197819dff8b0d536051bb505fe0a77f9484b0edf71972e34e"
+    },
+    {
+      "file": "N09_M07_F10_K001_17.mat",
+      "bearing_id": "K001",
+      "record_number": 17,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_17.mat",
+      "sha256": "6d515acf0fd3d76ab3f430b96b23207b5879bcf973504e6f47e2ca35bd6c2084"
+    },
+    {
+      "file": "N09_M07_F10_K001_18.mat",
+      "bearing_id": "K001",
+      "record_number": 18,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_18.mat",
+      "sha256": "8310bc89cf5915610c693887ceb9cdd3c1f8ab3bae7827f691496d1544aefb70"
+    },
+    {
+      "file": "N09_M07_F10_K001_19.mat",
+      "bearing_id": "K001",
+      "record_number": 19,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_19.mat",
+      "sha256": "12c2d2c88211281094511b26fc7adcc9c656781313985d40a8dc865f475d75d7"
+    },
+    {
+      "file": "N09_M07_F10_K001_20.mat",
+      "bearing_id": "K001",
+      "record_number": 20,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K001_20.mat",
+      "sha256": "f5f510e3153b3327f398c0396d3631e4923d9450465282b7910328666c1e276c"
+    },
+    {
+      "file": "N09_M07_F10_K002_1.mat",
+      "bearing_id": "K002",
+      "record_number": 1,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_1.mat",
+      "sha256": "b5707fd0384a6ca21c5bfb370f23345daa0678be2cb345279eccd2761b2aeace"
+    },
+    {
+      "file": "N09_M07_F10_K002_2.mat",
+      "bearing_id": "K002",
+      "record_number": 2,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_2.mat",
+      "sha256": "38a19ddad1da41d320b43bf814708a750d54cfd071c45ac5498582912e4b933f"
+    },
+    {
+      "file": "N09_M07_F10_K002_3.mat",
+      "bearing_id": "K002",
+      "record_number": 3,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_3.mat",
+      "sha256": "b6d19c399d78bf5d923aebc3fe5e0d6162fb85c3c7e47ad55157b6efd31ba9ac"
+    },
+    {
+      "file": "N09_M07_F10_K002_4.mat",
+      "bearing_id": "K002",
+      "record_number": 4,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_4.mat",
+      "sha256": "817546de0f37a106d11bfe8253434e3192c57dc51e13e206f4c84bcc69da2624"
+    },
+    {
+      "file": "N09_M07_F10_K002_5.mat",
+      "bearing_id": "K002",
+      "record_number": 5,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_5.mat",
+      "sha256": "5b37f8c17e8c96ffc0a1f7e9b23557fd5e9c8f54867d3cb30c3a8cf743989ec3"
+    },
+    {
+      "file": "N09_M07_F10_K002_6.mat",
+      "bearing_id": "K002",
+      "record_number": 6,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_6.mat",
+      "sha256": "936fddb0f3797bb0ad1c1a375131b490f0fb87386b247def82b38d4e92c5fdc5"
+    },
+    {
+      "file": "N09_M07_F10_K002_7.mat",
+      "bearing_id": "K002",
+      "record_number": 7,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_7.mat",
+      "sha256": "1e72f1f1e590f8fac9c09532d8aa999c7a9fd2088775847ff8407c8936afd01d"
+    },
+    {
+      "file": "N09_M07_F10_K002_8.mat",
+      "bearing_id": "K002",
+      "record_number": 8,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_8.mat",
+      "sha256": "5f4ab77e09448ed9dae1396d9010f25c5e787556046932d53eaf75dd6c4919bb"
+    },
+    {
+      "file": "N09_M07_F10_K002_9.mat",
+      "bearing_id": "K002",
+      "record_number": 9,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_9.mat",
+      "sha256": "75f7ca637ee7156418ba4fcc502f9769464443aa303138946726a4aebd650498"
+    },
+    {
+      "file": "N09_M07_F10_K002_10.mat",
+      "bearing_id": "K002",
+      "record_number": 10,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_10.mat",
+      "sha256": "b22f239b3ef2ebba3fb86eea63e72d1a20210218939b105ee288e7f02365a946"
+    },
+    {
+      "file": "N09_M07_F10_K002_11.mat",
+      "bearing_id": "K002",
+      "record_number": 11,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_11.mat",
+      "sha256": "02a3d090cc3813e735a7fee1b943c1e46718abe2958b800bc8fd5a570ef79290"
+    },
+    {
+      "file": "N09_M07_F10_K002_12.mat",
+      "bearing_id": "K002",
+      "record_number": 12,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_12.mat",
+      "sha256": "94b2dd38daa5533bbb58813b31fb149eaf4f4fa9ab1536947a7d7a98e89a7114"
+    },
+    {
+      "file": "N09_M07_F10_K002_13.mat",
+      "bearing_id": "K002",
+      "record_number": 13,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_13.mat",
+      "sha256": "bde79f400019169737a99c629631b7c47c9c280d56a0874109a8184c60502a26"
+    },
+    {
+      "file": "N09_M07_F10_K002_14.mat",
+      "bearing_id": "K002",
+      "record_number": 14,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_14.mat",
+      "sha256": "f11581530e0a91fa44d231f19ad3e51e28de59c8817d2eb0e61659c2182b7909"
+    },
+    {
+      "file": "N09_M07_F10_K002_15.mat",
+      "bearing_id": "K002",
+      "record_number": 15,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_15.mat",
+      "sha256": "e248af36ef9fa78ec767e7e2fdd2f4a9d2bb8516ed1197d090004388822b1782"
+    },
+    {
+      "file": "N09_M07_F10_K002_16.mat",
+      "bearing_id": "K002",
+      "record_number": 16,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_16.mat",
+      "sha256": "d9e01579f92cf4775bd4a862a970a3c435264e036b92d37c8e5d8d147c5828ff"
+    },
+    {
+      "file": "N09_M07_F10_K002_17.mat",
+      "bearing_id": "K002",
+      "record_number": 17,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_17.mat",
+      "sha256": "00cb386c36975746ee7a0c0989a64fbb1f5f3b0dcd43fa7632ba6da227e18788"
+    },
+    {
+      "file": "N09_M07_F10_K002_18.mat",
+      "bearing_id": "K002",
+      "record_number": 18,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_18.mat",
+      "sha256": "b005846bad34ed01746e0035fce135211ad1f1f122b433f8691c6aa76a0c834f"
+    },
+    {
+      "file": "N09_M07_F10_K002_19.mat",
+      "bearing_id": "K002",
+      "record_number": 19,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_19.mat",
+      "sha256": "72a229cf7eb29053baf0a9ee5e396355e8610abaca94a683e62f5ff352d9e8fa"
+    },
+    {
+      "file": "N09_M07_F10_K002_20.mat",
+      "bearing_id": "K002",
+      "record_number": 20,
+      "condition": "N09_M07_F10",
+      "split": "reference",
+      "provided_label": "healthy",
+      "relative_path": "raw/reference/N09_M07_F10_K002_20.mat",
+      "sha256": "3ce4c0e3b5d6eb54a9562092f362c9b1717acb5645e6f8b050ad36f8a1d08414"
+    },
+    {
+      "file": "N09_M07_F10_K003_1.mat",
+      "bearing_id": "K003",
+      "record_number": 1,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_1.mat",
+      "sha256": "f22af38489992fd268d67db1fb55a1af3c374cbabf5beac54c773fcb58570a2b"
+    },
+    {
+      "file": "N09_M07_F10_K003_2.mat",
+      "bearing_id": "K003",
+      "record_number": 2,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_2.mat",
+      "sha256": "e4605bbd7f28cd3cffa5300b5d2c3a8b3447fd51c8b264f163f96f43868145d3"
+    },
+    {
+      "file": "N09_M07_F10_K003_3.mat",
+      "bearing_id": "K003",
+      "record_number": 3,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_3.mat",
+      "sha256": "280d3e4a75b1bd7e3116d083ee24327a4a84fc3dfe0d0a204c0d476f25ac3d15"
+    },
+    {
+      "file": "N09_M07_F10_K003_4.mat",
+      "bearing_id": "K003",
+      "record_number": 4,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_4.mat",
+      "sha256": "c194b2e9a7f1a8b6baa98434618883330f4be6281e2b2844d4262cfee81e86d0"
+    },
+    {
+      "file": "N09_M07_F10_K003_5.mat",
+      "bearing_id": "K003",
+      "record_number": 5,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_5.mat",
+      "sha256": "c4d0850faba5713848fd11946525b80c1cd149983d5468529276a929699e9409"
+    },
+    {
+      "file": "N09_M07_F10_K003_6.mat",
+      "bearing_id": "K003",
+      "record_number": 6,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_6.mat",
+      "sha256": "f36326e65351f4d32dbb36c6ccc4263136d89973b5d63223ce6ce6239f09468e"
+    },
+    {
+      "file": "N09_M07_F10_K003_7.mat",
+      "bearing_id": "K003",
+      "record_number": 7,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_7.mat",
+      "sha256": "b10c885fb3f5697eff3c119b6bb0471886834df7d56f4cd643e50f120ebb12c2"
+    },
+    {
+      "file": "N09_M07_F10_K003_8.mat",
+      "bearing_id": "K003",
+      "record_number": 8,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_8.mat",
+      "sha256": "c85f58fe83ed9fffaee22ab873a9548c73a171b760b0b70029d52185853926f9"
+    },
+    {
+      "file": "N09_M07_F10_K003_9.mat",
+      "bearing_id": "K003",
+      "record_number": 9,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_9.mat",
+      "sha256": "260f7beed4915afcd977fd7f22340230eea2467e1a9a193125d9ae16278f607c"
+    },
+    {
+      "file": "N09_M07_F10_K003_10.mat",
+      "bearing_id": "K003",
+      "record_number": 10,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_10.mat",
+      "sha256": "f6c552c45e84aedbdd482a86ef1842c7155af371bb1dcce114897ca7d2996449"
+    },
+    {
+      "file": "N09_M07_F10_K003_11.mat",
+      "bearing_id": "K003",
+      "record_number": 11,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_11.mat",
+      "sha256": "3b0ea61167a5e1feaed5be8b94e35a96b3f7f2abe8d78fa368eea33ae0d19de6"
+    },
+    {
+      "file": "N09_M07_F10_K003_12.mat",
+      "bearing_id": "K003",
+      "record_number": 12,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_12.mat",
+      "sha256": "51ff705c6ee927fd96e2b7b81c9b454b7e12d9a923dc520faa149fe0994a21aa"
+    },
+    {
+      "file": "N09_M07_F10_K003_13.mat",
+      "bearing_id": "K003",
+      "record_number": 13,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_13.mat",
+      "sha256": "a81e6020ed0efb9c302f6c93145efb1d14ed67b92442cfd3a16c84c25a587287"
+    },
+    {
+      "file": "N09_M07_F10_K003_14.mat",
+      "bearing_id": "K003",
+      "record_number": 14,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_14.mat",
+      "sha256": "f2992e1b778579d91027ecdc97bc22e497d43c3b534dc962c2b1e44c4a0ac960"
+    },
+    {
+      "file": "N09_M07_F10_K003_15.mat",
+      "bearing_id": "K003",
+      "record_number": 15,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_15.mat",
+      "sha256": "48f5f32eb2f486db6b3411f28423ffabc654f3ed76128b5810b6a4e84e040b77"
+    },
+    {
+      "file": "N09_M07_F10_K003_16.mat",
+      "bearing_id": "K003",
+      "record_number": 16,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_16.mat",
+      "sha256": "237e002fe655494838ef079d57f1ac5391b63edbfb533e63d2ae811ebd2568ec"
+    },
+    {
+      "file": "N09_M07_F10_K003_17.mat",
+      "bearing_id": "K003",
+      "record_number": 17,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_17.mat",
+      "sha256": "7a9bac29e4a4dc6045059b5f6fe3ea88b93f1760dec9c0f6071938c75bbd204b"
+    },
+    {
+      "file": "N09_M07_F10_K003_18.mat",
+      "bearing_id": "K003",
+      "record_number": 18,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_18.mat",
+      "sha256": "adfee785d4ac180e4334f829bdf2a75a279e8e557e4d09104b22946cb29936e7"
+    },
+    {
+      "file": "N09_M07_F10_K003_19.mat",
+      "bearing_id": "K003",
+      "record_number": 19,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_19.mat",
+      "sha256": "5a3386c38268bfec6fd2cd3de493410f020f8e215b856cd730579eb45ec4acff"
+    },
+    {
+      "file": "N09_M07_F10_K003_20.mat",
+      "bearing_id": "K003",
+      "record_number": 20,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K003_20.mat",
+      "sha256": "47afe81b52d9d910ca16dd27f2722320ca6f186cadfc3c2960691a7faa9c3c70"
+    },
+    {
+      "file": "N09_M07_F10_K004_1.mat",
+      "bearing_id": "K004",
+      "record_number": 1,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_1.mat",
+      "sha256": "31426daacf26f23807759109a444ddc95ebe30db00f923981f7ed9ce76b4cab6"
+    },
+    {
+      "file": "N09_M07_F10_K004_2.mat",
+      "bearing_id": "K004",
+      "record_number": 2,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_2.mat",
+      "sha256": "5549d0dd2a53d9c0388f09653711a4a5edf3ee1be088773e5fdec2c83f86958a"
+    },
+    {
+      "file": "N09_M07_F10_K004_3.mat",
+      "bearing_id": "K004",
+      "record_number": 3,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_3.mat",
+      "sha256": "94b1f6ccff01adf6b8b6bcf093d87991a2de9e842a6489db3153ceec6a8abb47"
+    },
+    {
+      "file": "N09_M07_F10_K004_4.mat",
+      "bearing_id": "K004",
+      "record_number": 4,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_4.mat",
+      "sha256": "1ea311e79b3698988a985b167ef06f62803a051803cd606840cb370963fff8c5"
+    },
+    {
+      "file": "N09_M07_F10_K004_5.mat",
+      "bearing_id": "K004",
+      "record_number": 5,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_5.mat",
+      "sha256": "c32f97d8e1f9868e434b0a686674180392b506717a14d889f5d9c1f11d20e994"
+    },
+    {
+      "file": "N09_M07_F10_K004_6.mat",
+      "bearing_id": "K004",
+      "record_number": 6,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_6.mat",
+      "sha256": "43ed10f41bb020eb34da539a7a8c33b8f03732ef7250a0d1f29fa6d1675a550c"
+    },
+    {
+      "file": "N09_M07_F10_K004_7.mat",
+      "bearing_id": "K004",
+      "record_number": 7,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_7.mat",
+      "sha256": "7d481ecdbd3489537604824d10e8b1d4d2a57474afb7af7bb74a8b35ae0ca3a2"
+    },
+    {
+      "file": "N09_M07_F10_K004_8.mat",
+      "bearing_id": "K004",
+      "record_number": 8,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_8.mat",
+      "sha256": "fc712f2d838485283eba223153ee0931c805636914bbdb41660473374f87eab0"
+    },
+    {
+      "file": "N09_M07_F10_K004_9.mat",
+      "bearing_id": "K004",
+      "record_number": 9,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_9.mat",
+      "sha256": "e6b55b233b6ed3f830ee95d73943910525d44a2409a3bcc9f04676de4a63608f"
+    },
+    {
+      "file": "N09_M07_F10_K004_10.mat",
+      "bearing_id": "K004",
+      "record_number": 10,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_10.mat",
+      "sha256": "e29aaa324382f018b0c6e44b597806ae185118976a0d6185e523d9569f366423"
+    },
+    {
+      "file": "N09_M07_F10_K004_11.mat",
+      "bearing_id": "K004",
+      "record_number": 11,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_11.mat",
+      "sha256": "64a7c3c366c35812b7784ae8cd031b7d8383d26a3f7d9cb475db69af837d90c8"
+    },
+    {
+      "file": "N09_M07_F10_K004_12.mat",
+      "bearing_id": "K004",
+      "record_number": 12,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_12.mat",
+      "sha256": "1458761c5fef91a6a6c972e6838dab4ad52f9b9404f5ff4694e6e00ac47962f1"
+    },
+    {
+      "file": "N09_M07_F10_K004_13.mat",
+      "bearing_id": "K004",
+      "record_number": 13,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_13.mat",
+      "sha256": "23c24e204bdf439004ab63dc0396c79b0035d11481f3a838883c5b7103e292f8"
+    },
+    {
+      "file": "N09_M07_F10_K004_14.mat",
+      "bearing_id": "K004",
+      "record_number": 14,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_14.mat",
+      "sha256": "6cbc1aa70e095afcf7fc6f699a49eb957cf80d693a076f63b15feb133a5e7432"
+    },
+    {
+      "file": "N09_M07_F10_K004_15.mat",
+      "bearing_id": "K004",
+      "record_number": 15,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_15.mat",
+      "sha256": "dc720d58340a485888c134206272f39aedc630dfdf837ccf1febaf4acde67ecd"
+    },
+    {
+      "file": "N09_M07_F10_K004_16.mat",
+      "bearing_id": "K004",
+      "record_number": 16,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_16.mat",
+      "sha256": "be96ae2cbfa55bbd290f8aff81d34cf809a4f76b733a8858df3b5c32353ee111"
+    },
+    {
+      "file": "N09_M07_F10_K004_17.mat",
+      "bearing_id": "K004",
+      "record_number": 17,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_17.mat",
+      "sha256": "6d29e6593a1f5023733de8f193ff0a6d31c0992202f1e3a85fa0f41d3d4d519c"
+    },
+    {
+      "file": "N09_M07_F10_K004_18.mat",
+      "bearing_id": "K004",
+      "record_number": 18,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_18.mat",
+      "sha256": "88d71c9be3d8d9bfd1d5bdec60465357dcca8e1b5238c6b97f250a005a64f0c9"
+    },
+    {
+      "file": "N09_M07_F10_K004_19.mat",
+      "bearing_id": "K004",
+      "record_number": 19,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_19.mat",
+      "sha256": "6a8768f35705606453674f19c27f7f057e12c85bc1435700c683cf05fbd12fc1"
+    },
+    {
+      "file": "N09_M07_F10_K004_20.mat",
+      "bearing_id": "K004",
+      "record_number": 20,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "healthy",
+      "relative_path": "raw/tuning/N09_M07_F10_K004_20.mat",
+      "sha256": "4459c3a3eedfd31644e209ce961ed6e3f01f6668577d54742e45d7f263dcd7d0"
+    },
+    {
+      "file": "N09_M07_F10_KA04_1.mat",
+      "bearing_id": "KA04",
+      "record_number": 1,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_1.mat",
+      "sha256": "7db59955c834c4f74e8360bc873a4adc27beb569cf4406ba857777b1f986f138"
+    },
+    {
+      "file": "N09_M07_F10_KA04_2.mat",
+      "bearing_id": "KA04",
+      "record_number": 2,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_2.mat",
+      "sha256": "4e66934fe250625318364b3973468faedd555b66156f8d9212f5f14a2fd1f4a5"
+    },
+    {
+      "file": "N09_M07_F10_KA04_3.mat",
+      "bearing_id": "KA04",
+      "record_number": 3,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_3.mat",
+      "sha256": "2e543cbd0d246ac0eff03b95f4d9e0e94a72c39000d70c93d6608239ab03d259"
+    },
+    {
+      "file": "N09_M07_F10_KA04_4.mat",
+      "bearing_id": "KA04",
+      "record_number": 4,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_4.mat",
+      "sha256": "09426652f1cd315bc515fe78efda2b990c8c6b89bcf1e77db721bbfe638e5638"
+    },
+    {
+      "file": "N09_M07_F10_KA04_5.mat",
+      "bearing_id": "KA04",
+      "record_number": 5,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_5.mat",
+      "sha256": "8bd04b23789c5f09a360c144784223f857c462ac7df113450061ecef66ebd9db"
+    },
+    {
+      "file": "N09_M07_F10_KA04_6.mat",
+      "bearing_id": "KA04",
+      "record_number": 6,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_6.mat",
+      "sha256": "089cb63671075e9fe7fa0e8d8f0fa61aef22a6f90301825672e5eacc62107467"
+    },
+    {
+      "file": "N09_M07_F10_KA04_7.mat",
+      "bearing_id": "KA04",
+      "record_number": 7,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_7.mat",
+      "sha256": "fd69ac9778ede7a592280b74addc0daf3d4389e9cf70b6d5234bc1000d46ffb8"
+    },
+    {
+      "file": "N09_M07_F10_KA04_8.mat",
+      "bearing_id": "KA04",
+      "record_number": 8,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_8.mat",
+      "sha256": "356bb61c4daa97abff5fe9cde729a001c954bfba29191c2b1e3de9ad092c5e72"
+    },
+    {
+      "file": "N09_M07_F10_KA04_9.mat",
+      "bearing_id": "KA04",
+      "record_number": 9,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_9.mat",
+      "sha256": "13eee14a0a063e74575294e13906bce1eac415d250430285bc54eb413b72bb37"
+    },
+    {
+      "file": "N09_M07_F10_KA04_10.mat",
+      "bearing_id": "KA04",
+      "record_number": 10,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_10.mat",
+      "sha256": "289744a10c76513aeaaf1ae7eb5156cfc6ae935e7cadc955f7a07ca6ef279f13"
+    },
+    {
+      "file": "N09_M07_F10_KA04_11.mat",
+      "bearing_id": "KA04",
+      "record_number": 11,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_11.mat",
+      "sha256": "9e4a783f8ff132b0f7e844e6f3f4f88175e2f8416a45ab657c3a085d9d7855d4"
+    },
+    {
+      "file": "N09_M07_F10_KA04_12.mat",
+      "bearing_id": "KA04",
+      "record_number": 12,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_12.mat",
+      "sha256": "367cd0470bdf06b252ef942940c9351b290d07352ed4b91fd464cc0f75549671"
+    },
+    {
+      "file": "N09_M07_F10_KA04_13.mat",
+      "bearing_id": "KA04",
+      "record_number": 13,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_13.mat",
+      "sha256": "35e9b19959533f7a326992374f6cd4d36aa8a0f4e053bf6506e4c7683038f890"
+    },
+    {
+      "file": "N09_M07_F10_KA04_14.mat",
+      "bearing_id": "KA04",
+      "record_number": 14,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_14.mat",
+      "sha256": "b0d59a3fa20ae02c3b5a4694b5e1696d6e1514fc124d8914a1a707f3584c90ce"
+    },
+    {
+      "file": "N09_M07_F10_KA04_15.mat",
+      "bearing_id": "KA04",
+      "record_number": 15,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_15.mat",
+      "sha256": "394c9bcd9d09d20ae6366a60d1c6d8bdb3878809f0e412c57c13b5f557c5fb58"
+    },
+    {
+      "file": "N09_M07_F10_KA04_16.mat",
+      "bearing_id": "KA04",
+      "record_number": 16,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_16.mat",
+      "sha256": "b464305d2add5c9dfcf888273148106cfa812dfbbb1955d5d22ebb2044e399b7"
+    },
+    {
+      "file": "N09_M07_F10_KA04_17.mat",
+      "bearing_id": "KA04",
+      "record_number": 17,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_17.mat",
+      "sha256": "f309c8f26012c0cc088d8858b3b328d473cca93eb83d7d3c4b5ca046cf100cd5"
+    },
+    {
+      "file": "N09_M07_F10_KA04_18.mat",
+      "bearing_id": "KA04",
+      "record_number": 18,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_18.mat",
+      "sha256": "f07e5a1c5a5b3f94fa3ba0c390a63db889fe0e60213f353b1a40a309bb4bc78d"
+    },
+    {
+      "file": "N09_M07_F10_KA04_19.mat",
+      "bearing_id": "KA04",
+      "record_number": 19,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_19.mat",
+      "sha256": "86ab63fbb76616284b21737fcacc90c4bd52dfed6a49afb93dc6599fe09662b4"
+    },
+    {
+      "file": "N09_M07_F10_KA04_20.mat",
+      "bearing_id": "KA04",
+      "record_number": 20,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KA04_20.mat",
+      "sha256": "71345d884bf2b18fd80eaf4db706130af876c4160fe2cee7665edb9b9ea1eb76"
+    },
+    {
+      "file": "N09_M07_F10_KI04_1.mat",
+      "bearing_id": "KI04",
+      "record_number": 1,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_1.mat",
+      "sha256": "fa5d43cd8ab8cec9cadb0b9356096231b9f2a1a925a2bf935b5d3bcb2eecdf5f"
+    },
+    {
+      "file": "N09_M07_F10_KI04_2.mat",
+      "bearing_id": "KI04",
+      "record_number": 2,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_2.mat",
+      "sha256": "c993511853ff0a4326896586e0d21e06e0f3ad56be2c08f7a3e204a4e00ab9e9"
+    },
+    {
+      "file": "N09_M07_F10_KI04_3.mat",
+      "bearing_id": "KI04",
+      "record_number": 3,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_3.mat",
+      "sha256": "dfb89ba32084c6563b11569c6413368e5cf24f907f9dc9711dcb5e11a20f75ca"
+    },
+    {
+      "file": "N09_M07_F10_KI04_4.mat",
+      "bearing_id": "KI04",
+      "record_number": 4,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_4.mat",
+      "sha256": "3921cd85b2c14e36124fe83434ed742455d1ece94db4997e7af753888e96421a"
+    },
+    {
+      "file": "N09_M07_F10_KI04_5.mat",
+      "bearing_id": "KI04",
+      "record_number": 5,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_5.mat",
+      "sha256": "bcb8337e6cac324c82712abf92d2a48184fc6bcbd07aaa99cee0423cfe99da00"
+    },
+    {
+      "file": "N09_M07_F10_KI04_6.mat",
+      "bearing_id": "KI04",
+      "record_number": 6,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_6.mat",
+      "sha256": "fa3d3299f1f2c2d7143f528a2d55ede6d110d5fadda30dd5957e2aec7fa32775"
+    },
+    {
+      "file": "N09_M07_F10_KI04_7.mat",
+      "bearing_id": "KI04",
+      "record_number": 7,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_7.mat",
+      "sha256": "028bb40a85d1cc4907b39b9e95c04da530ef69afd35ddaecc87e46a14a074b22"
+    },
+    {
+      "file": "N09_M07_F10_KI04_8.mat",
+      "bearing_id": "KI04",
+      "record_number": 8,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_8.mat",
+      "sha256": "9516c6e5ec95889580575215f60d1a9c198a9d2b3f57f917fb22b7490facac1b"
+    },
+    {
+      "file": "N09_M07_F10_KI04_9.mat",
+      "bearing_id": "KI04",
+      "record_number": 9,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_9.mat",
+      "sha256": "3522d004c1488cce989ec8c983175182f86bbd3e258fd248aa6852a554c65552"
+    },
+    {
+      "file": "N09_M07_F10_KI04_10.mat",
+      "bearing_id": "KI04",
+      "record_number": 10,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_10.mat",
+      "sha256": "2c4049c485ed4987d711ef4efab4a66dbce09c9b476fceec3b940d6e1da58b77"
+    },
+    {
+      "file": "N09_M07_F10_KI04_11.mat",
+      "bearing_id": "KI04",
+      "record_number": 11,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_11.mat",
+      "sha256": "66ebe92149fb0f26439348185dfbf47dd54f5137e94b3647e55e7d7039f9b60e"
+    },
+    {
+      "file": "N09_M07_F10_KI04_12.mat",
+      "bearing_id": "KI04",
+      "record_number": 12,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_12.mat",
+      "sha256": "d853322bc2e445597046795e7ea0953f7fd7659545f2deb856f6f89563458530"
+    },
+    {
+      "file": "N09_M07_F10_KI04_13.mat",
+      "bearing_id": "KI04",
+      "record_number": 13,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_13.mat",
+      "sha256": "2a74c16ceb6ba2f1d08ddab839c6a61a22388ae63d0b3b69d80f92bbc9681f9a"
+    },
+    {
+      "file": "N09_M07_F10_KI04_14.mat",
+      "bearing_id": "KI04",
+      "record_number": 14,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_14.mat",
+      "sha256": "ee7b979c02fa8b2f2258d9ebd447ee572ceb9d2ba22eb8a7d46e4b65b3ff5438"
+    },
+    {
+      "file": "N09_M07_F10_KI04_15.mat",
+      "bearing_id": "KI04",
+      "record_number": 15,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_15.mat",
+      "sha256": "867cf319dd71491569c2afaf88db519c847593ed88e4aed9ac91a457c9834a31"
+    },
+    {
+      "file": "N09_M07_F10_KI04_16.mat",
+      "bearing_id": "KI04",
+      "record_number": 16,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_16.mat",
+      "sha256": "15a5da643c99d9e911f323d123d8a1e1a5f9c51ca64294f612add68c5c21cd5f"
+    },
+    {
+      "file": "N09_M07_F10_KI04_17.mat",
+      "bearing_id": "KI04",
+      "record_number": 17,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_17.mat",
+      "sha256": "011f2a1087ebee857e067beebac1d5452aa2702480b84c039b507a3182604845"
+    },
+    {
+      "file": "N09_M07_F10_KI04_18.mat",
+      "bearing_id": "KI04",
+      "record_number": 18,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_18.mat",
+      "sha256": "a57e2b52bc68a54c158efe3cb838ca812cbaeebb45d383c7a11e47959a0122ae"
+    },
+    {
+      "file": "N09_M07_F10_KI04_19.mat",
+      "bearing_id": "KI04",
+      "record_number": 19,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_19.mat",
+      "sha256": "836b65efc57855213bc728f18ebcc14cf4f1f69041a954f82954172b3f40f66c"
+    },
+    {
+      "file": "N09_M07_F10_KI04_20.mat",
+      "bearing_id": "KI04",
+      "record_number": 20,
+      "condition": "N09_M07_F10",
+      "split": "tuning",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/tuning/N09_M07_F10_KI04_20.mat",
+      "sha256": "52e779f7244f421f84953cd1f2495ef9a4cd05bdd3527b2808c1dc9dc352735a"
+    },
+    {
+      "file": "N09_M07_F10_K005_1.mat",
+      "bearing_id": "K005",
+      "record_number": 1,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_1.mat",
+      "sha256": "483bb71afbf45786faa3b960dc6850c87861a49cb07cae162574ef4e662a0c72"
+    },
+    {
+      "file": "N09_M07_F10_K005_2.mat",
+      "bearing_id": "K005",
+      "record_number": 2,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_2.mat",
+      "sha256": "7e9701c00f67e9732203132fa9c1e009ebef820571ee12b489301dbe6308eefd"
+    },
+    {
+      "file": "N09_M07_F10_K005_3.mat",
+      "bearing_id": "K005",
+      "record_number": 3,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_3.mat",
+      "sha256": "157355726066227a1fd38865d6b385c37f1fc64862fbf17c2e47eb4b81d9a752"
+    },
+    {
+      "file": "N09_M07_F10_K005_4.mat",
+      "bearing_id": "K005",
+      "record_number": 4,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_4.mat",
+      "sha256": "daf43de6e0c94273e26344fd0ac41775eef6f636d3c58c91c03f38d56737da48"
+    },
+    {
+      "file": "N09_M07_F10_K005_5.mat",
+      "bearing_id": "K005",
+      "record_number": 5,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_5.mat",
+      "sha256": "fa0c8cca1ae257ee1a98b12f0aa662db5a11eecad3241ae3b5a5ca634346ee69"
+    },
+    {
+      "file": "N09_M07_F10_K005_6.mat",
+      "bearing_id": "K005",
+      "record_number": 6,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_6.mat",
+      "sha256": "9094c83d11749d200d0d25452192bd683939abeec0f8a225ee331a01cb40a238"
+    },
+    {
+      "file": "N09_M07_F10_K005_7.mat",
+      "bearing_id": "K005",
+      "record_number": 7,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_7.mat",
+      "sha256": "5c48e8deac53882a95217684341d1a9fed8506506f0b5b82f614f21c7103d108"
+    },
+    {
+      "file": "N09_M07_F10_K005_8.mat",
+      "bearing_id": "K005",
+      "record_number": 8,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_8.mat",
+      "sha256": "3f6db296e6843ee81c8bfce4e0858eb4d4b90eaf14c3bf17ed1094fb621e2d72"
+    },
+    {
+      "file": "N09_M07_F10_K005_9.mat",
+      "bearing_id": "K005",
+      "record_number": 9,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_9.mat",
+      "sha256": "2bb151be36a87c48e27da25a74b13453e377d25e23919c18ba81f494392f2cd0"
+    },
+    {
+      "file": "N09_M07_F10_K005_10.mat",
+      "bearing_id": "K005",
+      "record_number": 10,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_10.mat",
+      "sha256": "8b6323ba2a2ecadc17fe4783dea66dc65215c96bb9c924abc6362fb8a1ae30fe"
+    },
+    {
+      "file": "N09_M07_F10_K005_11.mat",
+      "bearing_id": "K005",
+      "record_number": 11,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_11.mat",
+      "sha256": "01bedccf941b680ea5b0a23dd6ba44b79366b0dfb6f6ae10528540291d7abc33"
+    },
+    {
+      "file": "N09_M07_F10_K005_12.mat",
+      "bearing_id": "K005",
+      "record_number": 12,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_12.mat",
+      "sha256": "41e8667927179582f41b16d1c3a93f87d835e16bb8a0d904eca33547aba7bde6"
+    },
+    {
+      "file": "N09_M07_F10_K005_13.mat",
+      "bearing_id": "K005",
+      "record_number": 13,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_13.mat",
+      "sha256": "db55717df46bc9d03a65483e5ce7a0ad70c0b2b4f91a7fc9e2d03919f9c92fec"
+    },
+    {
+      "file": "N09_M07_F10_K005_14.mat",
+      "bearing_id": "K005",
+      "record_number": 14,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_14.mat",
+      "sha256": "0b1bd961544f382afc6f0edbffd70e93086a815cfd0a7cffa9b56a282f295422"
+    },
+    {
+      "file": "N09_M07_F10_K005_15.mat",
+      "bearing_id": "K005",
+      "record_number": 15,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_15.mat",
+      "sha256": "9c68613b68ddac4286665647e8aa938491bd0540f0caae17afcd9a895c706d03"
+    },
+    {
+      "file": "N09_M07_F10_K005_16.mat",
+      "bearing_id": "K005",
+      "record_number": 16,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_16.mat",
+      "sha256": "4c717c018b3453b2730280a321fd11fde109dd0397b16ae095ad333507c81c18"
+    },
+    {
+      "file": "N09_M07_F10_K005_17.mat",
+      "bearing_id": "K005",
+      "record_number": 17,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_17.mat",
+      "sha256": "be689540cd2512993d28284358da41e801aa848782b323494b1b5d97a12a92c9"
+    },
+    {
+      "file": "N09_M07_F10_K005_18.mat",
+      "bearing_id": "K005",
+      "record_number": 18,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_18.mat",
+      "sha256": "8cf315a0d2dd580a65ce3bfc5eb773ddc428c75ebae037d179f93b0e41348f5c"
+    },
+    {
+      "file": "N09_M07_F10_K005_19.mat",
+      "bearing_id": "K005",
+      "record_number": 19,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_19.mat",
+      "sha256": "751140e60f35c8139f87c085c92254af52c2ff4795f85e48d09e52c42e384ca8"
+    },
+    {
+      "file": "N09_M07_F10_K005_20.mat",
+      "bearing_id": "K005",
+      "record_number": 20,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K005_20.mat",
+      "sha256": "58c49d4f8f654de5a1b5fb86c0d690cd4902cecbfe5885ebffe0272a2e297cec"
+    },
+    {
+      "file": "N09_M07_F10_K006_1.mat",
+      "bearing_id": "K006",
+      "record_number": 1,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_1.mat",
+      "sha256": "04e95745d8e71a23ba60c96bd57b9fa69278d40f0beb439f86c68ec7328bd4d0"
+    },
+    {
+      "file": "N09_M07_F10_K006_2.mat",
+      "bearing_id": "K006",
+      "record_number": 2,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_2.mat",
+      "sha256": "06e1271b246708ce880f83a81c32991736a07d0bdcf8203f3e9b03ea66fd8d8b"
+    },
+    {
+      "file": "N09_M07_F10_K006_3.mat",
+      "bearing_id": "K006",
+      "record_number": 3,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_3.mat",
+      "sha256": "edf0e95cb5f5f39f1b7b59cd35e1787506da72c8e25b97bd52f200c5cbb2d1f0"
+    },
+    {
+      "file": "N09_M07_F10_K006_4.mat",
+      "bearing_id": "K006",
+      "record_number": 4,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_4.mat",
+      "sha256": "e38326433b9c5de82a5c9d6028f1d31451272ba1bf46080e3e1e26a7f9e58865"
+    },
+    {
+      "file": "N09_M07_F10_K006_5.mat",
+      "bearing_id": "K006",
+      "record_number": 5,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_5.mat",
+      "sha256": "19d7ea5a7b762cce56e44654fc93ad07a2af540cec4ddf56daf059797128d215"
+    },
+    {
+      "file": "N09_M07_F10_K006_6.mat",
+      "bearing_id": "K006",
+      "record_number": 6,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_6.mat",
+      "sha256": "dc44154c78bf4efee3ff22aa1743415ef50c5756fe7f237516bcc0d582ad581a"
+    },
+    {
+      "file": "N09_M07_F10_K006_7.mat",
+      "bearing_id": "K006",
+      "record_number": 7,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_7.mat",
+      "sha256": "e6a87501af27d9b12850161848b51c47315263554f61c635b7703fd24f35af9c"
+    },
+    {
+      "file": "N09_M07_F10_K006_8.mat",
+      "bearing_id": "K006",
+      "record_number": 8,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_8.mat",
+      "sha256": "be94363cf312a832106c1bb4ad228020330ce8507b878aa6d34e165d16e61c6c"
+    },
+    {
+      "file": "N09_M07_F10_K006_9.mat",
+      "bearing_id": "K006",
+      "record_number": 9,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_9.mat",
+      "sha256": "dbb252f3ff3386da4c6c99420baa24ff69bb144465bd534318ad1e710d639a22"
+    },
+    {
+      "file": "N09_M07_F10_K006_10.mat",
+      "bearing_id": "K006",
+      "record_number": 10,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_10.mat",
+      "sha256": "ca19dd05781cdc0ffafabd7abbd315f6d8735e5afc20cf0d9fd9d824c7539bd8"
+    },
+    {
+      "file": "N09_M07_F10_K006_11.mat",
+      "bearing_id": "K006",
+      "record_number": 11,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_11.mat",
+      "sha256": "e363bc11aa947d91be1ddffec78ef98d99e3ee51eb355e151c4aa9e7e3074058"
+    },
+    {
+      "file": "N09_M07_F10_K006_12.mat",
+      "bearing_id": "K006",
+      "record_number": 12,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_12.mat",
+      "sha256": "109cd09bef7bddf7afc04b08c370395b7bbadf06af0b27c404ca5d73827ece14"
+    },
+    {
+      "file": "N09_M07_F10_K006_13.mat",
+      "bearing_id": "K006",
+      "record_number": 13,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_13.mat",
+      "sha256": "01271ed6803d88f00b8acc5c6779e4f8a7f80df09613a4484dc35ecbd0d50a48"
+    },
+    {
+      "file": "N09_M07_F10_K006_14.mat",
+      "bearing_id": "K006",
+      "record_number": 14,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_14.mat",
+      "sha256": "12555b2604b5bf0a16a03536af5d135ce43cd1a9edbc6804e9220c6eea445d2d"
+    },
+    {
+      "file": "N09_M07_F10_K006_15.mat",
+      "bearing_id": "K006",
+      "record_number": 15,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_15.mat",
+      "sha256": "7dd4f7a8d1871f7be03b92e5ccc0b257b852c44c3bbf0f1abfa3c52d14dfeb69"
+    },
+    {
+      "file": "N09_M07_F10_K006_16.mat",
+      "bearing_id": "K006",
+      "record_number": 16,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_16.mat",
+      "sha256": "4b9122f395b59fc0524493eff7b91b8a6473640fd474344007823ff6ced873fa"
+    },
+    {
+      "file": "N09_M07_F10_K006_17.mat",
+      "bearing_id": "K006",
+      "record_number": 17,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_17.mat",
+      "sha256": "23851cd03eb17d8ac375954fc9ce02bfc3be2ae5a4e11c2e923c8cec3e7f3e69"
+    },
+    {
+      "file": "N09_M07_F10_K006_18.mat",
+      "bearing_id": "K006",
+      "record_number": 18,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_18.mat",
+      "sha256": "5dcde166f4de09df8d9fbff6bb4b9e171aef7ac332ecaf1964962b8c70af72ec"
+    },
+    {
+      "file": "N09_M07_F10_K006_19.mat",
+      "bearing_id": "K006",
+      "record_number": 19,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_19.mat",
+      "sha256": "aedd5581833d9f2a6a63030785e9a2f582ffd777d2bdc3dff37149a68f58cf17"
+    },
+    {
+      "file": "N09_M07_F10_K006_20.mat",
+      "bearing_id": "K006",
+      "record_number": 20,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "healthy",
+      "relative_path": "raw/evaluation/N09_M07_F10_K006_20.mat",
+      "sha256": "21dc7fd7a3ddf3e06b9132bfd5dbd3ebce09d6a2078bb52f255a48ec22b9cdb8"
+    },
+    {
+      "file": "N09_M07_F10_KA15_1.mat",
+      "bearing_id": "KA15",
+      "record_number": 1,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_1.mat",
+      "sha256": "fe68d586af365f9d1b296a6cedee6875a2e382c10cc8cb86e95373f2bf7b2d7e"
+    },
+    {
+      "file": "N09_M07_F10_KA15_2.mat",
+      "bearing_id": "KA15",
+      "record_number": 2,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_2.mat",
+      "sha256": "c6a45ba802b9168f59d23b8e83df82b83ad8c9ef6176c53ec3e4aa0a55e76def"
+    },
+    {
+      "file": "N09_M07_F10_KA15_3.mat",
+      "bearing_id": "KA15",
+      "record_number": 3,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_3.mat",
+      "sha256": "bc9090ccef9fcb4c45bd49584f63cbc47a59be589ce26d8de038ff7d64e721f4"
+    },
+    {
+      "file": "N09_M07_F10_KA15_4.mat",
+      "bearing_id": "KA15",
+      "record_number": 4,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_4.mat",
+      "sha256": "47ccfb5e5844f44877d9fa179fcf0b4666efd6470186fad33ff2662021b5b4a5"
+    },
+    {
+      "file": "N09_M07_F10_KA15_5.mat",
+      "bearing_id": "KA15",
+      "record_number": 5,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_5.mat",
+      "sha256": "252dc596b3d3ee0331f63530e9070a807065b5f85af933eb531330c1118d2c01"
+    },
+    {
+      "file": "N09_M07_F10_KA15_6.mat",
+      "bearing_id": "KA15",
+      "record_number": 6,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_6.mat",
+      "sha256": "3b81f010cd8edf599539beebdd826a142b8a892860b2670d65e0a7cc3c825f4d"
+    },
+    {
+      "file": "N09_M07_F10_KA15_7.mat",
+      "bearing_id": "KA15",
+      "record_number": 7,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_7.mat",
+      "sha256": "6901dba830100187db48e636483732e809e950712959bd69711a060eae89f650"
+    },
+    {
+      "file": "N09_M07_F10_KA15_8.mat",
+      "bearing_id": "KA15",
+      "record_number": 8,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_8.mat",
+      "sha256": "d3acc896d6ac51ee53314b478dbe0e7659ea2584f5b8cb3d4e224f0c6cb27a33"
+    },
+    {
+      "file": "N09_M07_F10_KA15_9.mat",
+      "bearing_id": "KA15",
+      "record_number": 9,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_9.mat",
+      "sha256": "dc2f1f47245b6f5c87607c9415b4d1b0d8c60568797b980d476a70140488e2f0"
+    },
+    {
+      "file": "N09_M07_F10_KA15_10.mat",
+      "bearing_id": "KA15",
+      "record_number": 10,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_10.mat",
+      "sha256": "b72e5d155c9e3a192fae9378e9fb97062cc47604f260ecd9907b0e98710d9460"
+    },
+    {
+      "file": "N09_M07_F10_KA15_11.mat",
+      "bearing_id": "KA15",
+      "record_number": 11,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_11.mat",
+      "sha256": "e53cb5e1bb1b06ea176afd2480c913c34257c90f7e7e91dea5341c2590939374"
+    },
+    {
+      "file": "N09_M07_F10_KA15_12.mat",
+      "bearing_id": "KA15",
+      "record_number": 12,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_12.mat",
+      "sha256": "480db0283f18a11d7a3b2e0f01e00c22af6a6116ccf9a02e09d36ef73b70d71d"
+    },
+    {
+      "file": "N09_M07_F10_KA15_13.mat",
+      "bearing_id": "KA15",
+      "record_number": 13,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_13.mat",
+      "sha256": "12884153a77537b29575422c79c1680ebba52dbac7e5eb38d488a7bd8af69245"
+    },
+    {
+      "file": "N09_M07_F10_KA15_14.mat",
+      "bearing_id": "KA15",
+      "record_number": 14,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_14.mat",
+      "sha256": "365dd44b083788df00fa5939ca8ba4785689863286e0a03bec77aa3f610bb7ad"
+    },
+    {
+      "file": "N09_M07_F10_KA15_15.mat",
+      "bearing_id": "KA15",
+      "record_number": 15,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_15.mat",
+      "sha256": "5c8139b3216e92fa68283d555a222ba596cf79c8a1246684fb9939133fe15c62"
+    },
+    {
+      "file": "N09_M07_F10_KA15_16.mat",
+      "bearing_id": "KA15",
+      "record_number": 16,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_16.mat",
+      "sha256": "999274f096043f7fce4263223eb6436268844ebccd78710b993c6d81589957bb"
+    },
+    {
+      "file": "N09_M07_F10_KA15_17.mat",
+      "bearing_id": "KA15",
+      "record_number": 17,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_17.mat",
+      "sha256": "fd436bfd5ba2c0c2c0c3573567eff2ea59515733d5076afea618ab3f0d83904e"
+    },
+    {
+      "file": "N09_M07_F10_KA15_18.mat",
+      "bearing_id": "KA15",
+      "record_number": 18,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_18.mat",
+      "sha256": "00fd0f58bc1583b84310ddbac3b56f3ea1feed314bcd255cb1fa849e57c94d10"
+    },
+    {
+      "file": "N09_M07_F10_KA15_19.mat",
+      "bearing_id": "KA15",
+      "record_number": 19,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_19.mat",
+      "sha256": "45d07f5cf829883c1473d988b268b24edd2512a6519b40930f2f21e8cb39ec00"
+    },
+    {
+      "file": "N09_M07_F10_KA15_20.mat",
+      "bearing_id": "KA15",
+      "record_number": 20,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "outer_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KA15_20.mat",
+      "sha256": "e0d9af114c167bd8d81d81194f5cb8bbf0e0342e06524d4c2f5c31bdea4e6c29"
+    },
+    {
+      "file": "N09_M07_F10_KI14_1.mat",
+      "bearing_id": "KI14",
+      "record_number": 1,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_1.mat",
+      "sha256": "97c9bbab8538db4ffc265e927d684b87c94a80449a1c024c608e380457dd840e"
+    },
+    {
+      "file": "N09_M07_F10_KI14_2.mat",
+      "bearing_id": "KI14",
+      "record_number": 2,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_2.mat",
+      "sha256": "59c9382c396471faf980cecfcf6a049da58a613e46f62a54c267d5f826818970"
+    },
+    {
+      "file": "N09_M07_F10_KI14_3.mat",
+      "bearing_id": "KI14",
+      "record_number": 3,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_3.mat",
+      "sha256": "a79cd75f744671f23924f43352145757d8622f6ea8d022e6f0dd598e12226bdb"
+    },
+    {
+      "file": "N09_M07_F10_KI14_4.mat",
+      "bearing_id": "KI14",
+      "record_number": 4,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_4.mat",
+      "sha256": "33308d67ffd0833b7c7340550c18ee17d2188c09c2c543f6b7348b36f2a01473"
+    },
+    {
+      "file": "N09_M07_F10_KI14_5.mat",
+      "bearing_id": "KI14",
+      "record_number": 5,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_5.mat",
+      "sha256": "d2bec7b7e92049f7720bdc4c860f513013a4455f4fae0176f57e156419865ee7"
+    },
+    {
+      "file": "N09_M07_F10_KI14_6.mat",
+      "bearing_id": "KI14",
+      "record_number": 6,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_6.mat",
+      "sha256": "17bb26c0ed36c7c7431c8cb8295aaa9769f30eb7a62666c2d740e983654d4d99"
+    },
+    {
+      "file": "N09_M07_F10_KI14_7.mat",
+      "bearing_id": "KI14",
+      "record_number": 7,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_7.mat",
+      "sha256": "642f2ee4ae13b1e4d4fa679c26b8732b6454ca5412379515f45715beb3120f69"
+    },
+    {
+      "file": "N09_M07_F10_KI14_8.mat",
+      "bearing_id": "KI14",
+      "record_number": 8,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_8.mat",
+      "sha256": "5f989f35f39a1328cbd9312c63a030f8017232eeb9bf35c38ebf40aa1f00a487"
+    },
+    {
+      "file": "N09_M07_F10_KI14_9.mat",
+      "bearing_id": "KI14",
+      "record_number": 9,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_9.mat",
+      "sha256": "f9c616bc83fd97b0a1c169b35628772b8bfd2d6c7cd8581bb709a4dc0092d12d"
+    },
+    {
+      "file": "N09_M07_F10_KI14_10.mat",
+      "bearing_id": "KI14",
+      "record_number": 10,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_10.mat",
+      "sha256": "2366470b159c84844828080189886e5f87784b9891d1a95f913e91ced8e9c452"
+    },
+    {
+      "file": "N09_M07_F10_KI14_11.mat",
+      "bearing_id": "KI14",
+      "record_number": 11,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_11.mat",
+      "sha256": "fbf3e7d71d79cc001d3634e1b6ec7081b58cfdf5d2a9e70d5371fb6c7a50b513"
+    },
+    {
+      "file": "N09_M07_F10_KI14_12.mat",
+      "bearing_id": "KI14",
+      "record_number": 12,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_12.mat",
+      "sha256": "ff3280755e948ba97636de2b3f6b051187d20f49c3d1021bb53199c4465e74d4"
+    },
+    {
+      "file": "N09_M07_F10_KI14_13.mat",
+      "bearing_id": "KI14",
+      "record_number": 13,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_13.mat",
+      "sha256": "5a88351ccbd0450ba5438ba6c3c770a3a3ecfb16f3a7cf6b6ef2b0ea2b53883a"
+    },
+    {
+      "file": "N09_M07_F10_KI14_14.mat",
+      "bearing_id": "KI14",
+      "record_number": 14,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_14.mat",
+      "sha256": "665114a56ab12b3bbad7e866cb485561a4e796c8d05d49e7b76d4437eb03f328"
+    },
+    {
+      "file": "N09_M07_F10_KI14_15.mat",
+      "bearing_id": "KI14",
+      "record_number": 15,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_15.mat",
+      "sha256": "b1fe27caf87de69385fe76b5661bf0c361893c8bfbada1a999f61369d6637feb"
+    },
+    {
+      "file": "N09_M07_F10_KI14_16.mat",
+      "bearing_id": "KI14",
+      "record_number": 16,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_16.mat",
+      "sha256": "5ed0f48eeb59d00963cbe12b32cdbc392f3d8c3179bb9973fdc91f349c3975fa"
+    },
+    {
+      "file": "N09_M07_F10_KI14_17.mat",
+      "bearing_id": "KI14",
+      "record_number": 17,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_17.mat",
+      "sha256": "91bcdfec7684a5998e2505b1e396a998a910dd2937ccf6045380f9c5235524bf"
+    },
+    {
+      "file": "N09_M07_F10_KI14_18.mat",
+      "bearing_id": "KI14",
+      "record_number": 18,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_18.mat",
+      "sha256": "7ff8089b4646a22bd38d4eb87251d64e4c7222059a705e877ddbd985ed848898"
+    },
+    {
+      "file": "N09_M07_F10_KI14_19.mat",
+      "bearing_id": "KI14",
+      "record_number": 19,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_19.mat",
+      "sha256": "6307e07cd2dc5431ab82d4833f9025ec21cedde5cbdfa3ee8994e5a0153bf1a2"
+    },
+    {
+      "file": "N09_M07_F10_KI14_20.mat",
+      "bearing_id": "KI14",
+      "record_number": 20,
+      "condition": "N09_M07_F10",
+      "split": "evaluation",
+      "provided_label": "inner_ring_damage",
+      "relative_path": "raw/evaluation/N09_M07_F10_KI14_20.mat",
+      "sha256": "3fc4da35539504738153c02101fc6889e3bc10b04674f9a69bcef66ce4d17ae0"
+    }
+  ]
+}

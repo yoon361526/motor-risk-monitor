@@ -53,6 +53,30 @@ desktop.ini
 data/paderborn/raw/
 data/paderborn/derived/
 
+# Streamlit 배포에 필요한 활성 모델과 예제 4개만 허용한다.
+!data/paderborn/raw/
+data/paderborn/raw/*
+!data/paderborn/raw/tuning/
+data/paderborn/raw/tuning/*
+!data/paderborn/raw/tuning/N09_M07_F10_K003_1.mat
+!data/paderborn/raw/tuning/N09_M07_F10_K004_1.mat
+!data/paderborn/raw/tuning/N09_M07_F10_KA04_1.mat
+!data/paderborn/raw/tuning/N09_M07_F10_KI04_1.mat
+
+!data/paderborn/derived/
+data/paderborn/derived/*
+!data/paderborn/derived/comparison/
+data/paderborn/derived/comparison/*
+!data/paderborn/derived/comparison/dataset_manifest.json
+!data/paderborn/derived/deployed/
+data/paderborn/derived/deployed/*
+!data/paderborn/derived/deployed/active_selected_model.json
+!data/paderborn/derived/deployed/d006850046ef19c3afe6/
+data/paderborn/derived/deployed/d006850046ef19c3afe6/*
+!data/paderborn/derived/deployed/d006850046ef19c3afe6/engine.joblib
+!data/paderborn/derived/deployed/d006850046ef19c3afe6/model_metadata.json
+!data/paderborn/derived/deployed/d006850046ef19c3afe6/tuning_metrics.json
+
 # 개인 제출용 텍스트 보고서와 원본 확인·보관 자료는 로컬에 유지한다.
 /docs/*-report-draft.txt
 /docs/report-assets/

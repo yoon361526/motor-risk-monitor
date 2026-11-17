@@ -168,6 +168,12 @@ def load_manifest(data_root: Path, config: VibrationConfig) -> dict:
     return manifest
 
 
+def available_tuning_records(data_root: Path, manifest: dict) -> list[dict]:
+    """배포 예제만 있는 환경에서도 실제 존재하는 개발 기록만 제공한다."""
+    return [entry for entry in manifest["records"]
+            if entry["split"] == "tuning" and (data_root / entry["relative_path"]).is_file()]
+
+
 def read_windowed_record(path: Path, config: VibrationConfig,
                          cache_dir: Path | None = None) -> WindowedRecord:
     """원본 해시와 특징 설정이 같을 때만 특징 캐시를 재사용한다."""

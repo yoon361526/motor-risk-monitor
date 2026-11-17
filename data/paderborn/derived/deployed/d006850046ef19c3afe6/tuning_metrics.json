@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "split": "tuning",
+  "model_id": "d006850046ef19c3afe6",
+  "config_fingerprint": "b6f23ae99ca63c2ac7afc3806ccb9b2f7bc9e0bd7fb2435c900f747c08dd46d9",
+  "evaluation_unit": "record",
+  "record_count": 80,
+  "bearing_count": 4,
+  "metrics": {
+    "statistics": {
+      "name": "정상 참조 통계",
+      "tn": 39,
+      "fp": 1,
+      "fn": 15,
+      "tp": 25,
+      "record_count": 80,
+      "bearing_count": 4,
+      "false_positive_rate": 0.025,
+      "miss_rate": 0.375,
+      "by_bearing": {
+        "K003": {
+          "provided_label": "healthy",
+          "record_count": 20,
+          "alert_record_count": 1
+        },
+        "K004": {
+          "provided_label": "healthy",
+          "record_count": 20,
+          "alert_record_count": 0
+        },
+        "KA04": {
+          "provided_label": "outer_ring_damage",
+          "record_count": 20,
+          "alert_record_count": 20
+        },
+        "KI04": {
+          "provided_label": "inner_ring_damage",
+          "record_count": 20,
+          "alert_record_count": 5
+        }
+      }
+    },
+    "isolation_forest": {
+      "name": "Isolation Forest",
+      "tn": 39,
+      "fp": 1,
+      "fn": 2,
+      "tp": 38,
+      "record_count": 80,
+      "bearing_count": 4,
+      "false_positive_rate": 0.025,
+      "miss_rate": 0.05,
+      "by_bearing": {
+        "K003": {
+          "provided_label": "healthy",
+          "record_count": 20,
+          "alert_record_count": 0
+        },
+        "K004": {
+          "provided_label": "healthy",
+          "record_count": 20,
+          "alert_record_count": 1
+        },
+        "KA04": {
+          "provided_label": "outer_ring_damage",
+          "record_count": 20,
+          "alert_record_count": 20
+        },
+        "KI04": {
+          "provided_label": "inner_ring_damage",
+          "record_count": 20,
+          "alert_record_count": 18
+        }
+      }
+    }
+  }
+}

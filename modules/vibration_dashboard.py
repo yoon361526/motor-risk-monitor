@@ -13,7 +13,7 @@ import streamlit as st
 from modules.report_generator import generate_report
 from modules.ui_state import remembered_radio, remembered_selectbox
 from modules.vibration_config import load_vibration_config
-from modules.vibration_dataset import load_manifest
+from modules.vibration_dataset import available_tuning_records, load_manifest
 from modules.vibration_report import generate_vibration_template_report
 from modules.vibration_selected_model import load_selected_engine, read_selected_record
 
@@ -85,7 +85,8 @@ def render_vibration_comparison(base_dir: Path) -> None:
         feature_names, feature_labels = engine.feature_names, engine.feature_labels
     except (ValueError, OSError) as error:
         st.info(str(error))
-        st.code(".\\.venv\\Scripts\\python.exe activate_selected_model.py", language="powershell")
+        st.caption("배포 서버에서는 모델과 예제 데이터가 GitHub에 포함됐는지 확인해 주세요. "
+                   "준비 방법은 docs/streamlit-deployment.md에 있습니다.")
         return
 
     st.caption(f"현재 분석 모델: {model_name}")
@@ -95,7 +96,14 @@ def render_vibration_comparison(base_dir: Path) -> None:
                               "vibration_comparison_source")
     try:
         if source == "설정 조정용 기록":
-            entries = [entry for entry in manifest["records"] if entry["split"] == "tuning"]
+            entries = available_tuning_records(data_root, manifest)
+            if not entries:
+                st.info("설정 조정용 예제 파일이 없습니다. 새 MAT 업로드를 선택해 주세요.")
+                return
+            total = sum(entry["split"] == "tuning" for entry in manifest["records"])
+            if len(entries) < total:
+                st.caption(f"배포용 예제 {len(entries)}개를 제공합니다. "
+                           f"전체 개발 기록은 {total}개이며, 위 설정 조정용 결과는 전체 기록 기준입니다.")
             by_file = {entry["file"]: entry for entry in entries}
             selected_file = remembered_selectbox("MAT 기록", list(by_file), "vibration_comparison_file")
             entry = by_file[selected_file]
