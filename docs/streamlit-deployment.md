@@ -59,5 +59,13 @@ AI 서술 보고서는 선택 사항이다. 사용할 경우 Streamlit Secrets�
 `ANTHROPIC_API_KEY = "실제 키"`를 등록한다. 키가 없으면 템플릿 보고서를 사용한다.
 키를 저장소에 커밋하지 않는다.
 
+## PDF 보고서 저장
+
+보고서 작성 후 `보고서 저장 (PDF)`로 화면의 보고서 내용을 내려받는다.
+진동 비교 분석과 CSV 진단 모두 지원하며, 마크다운 저장도 제공한다.
+`assets/fonts/`의 나눔고딕 Regular·Bold와 `OFL.txt`를 코드와 함께 배포해야 한다.
+글꼴은 PDF에 포함되므로 서버의 시스템 글꼴을 설치할 필요가 없다.
+PDF 생성은 외부 API를 호출하지 않는다.
+
 공식 안내: [배포](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/deploy),
 [Secrets](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/secrets-management).

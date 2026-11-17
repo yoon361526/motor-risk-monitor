@@ -21,6 +21,7 @@ import streamlit as st
 
 from modules.risk_engine import RiskEngine
 from modules.report_generator import generate_report
+from modules.report_download import render_report_downloads
 from modules.ui_state import remembered_selectbox
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -328,6 +329,7 @@ def main() -> None:
         st.session_state[report_key] = report
     if report_key in st.session_state:
         st.markdown(st.session_state[report_key])
+        render_report_downloads(st.session_state[report_key], name)
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ import pandas as pd
 import streamlit as st
 
 from modules.report_generator import generate_report
+from modules.report_download import render_report_downloads
 from modules.ui_state import remembered_radio, remembered_selectbox
 from modules.vibration_config import load_vibration_config
 from modules.vibration_dataset import available_tuning_records, load_manifest
@@ -190,7 +191,6 @@ def render_vibration_comparison(base_dir: Path) -> None:
                                           else generate_vibration_template_report(result))
     if report_key in st.session_state:
         st.markdown(st.session_state[report_key])
-        st.download_button("보고서 저장", st.session_state[report_key],
-                           file_name=f"{Path(meta['file']).stem}_report.md", mime="text/markdown")
+        render_report_downloads(st.session_state[report_key], meta["file"])
     st.download_button("분석 결과 JSON 저장", json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False),
                        file_name=f"{Path(meta['file']).stem}_analysis.json", mime="application/json")

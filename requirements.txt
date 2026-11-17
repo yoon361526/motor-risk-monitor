@@ -10,6 +10,9 @@ matplotlib>=3.8,<4 # 특징 선택 실험의 오프라인 분포 그래프 저�
 pyyaml>=6.0        # config(risk_thresholds.yaml) 로드
 pytest>=8.0        # 단위 테스트
 streamlit>=1.30    # 진단 대시보드 (app.py)
+reportlab>=4.4,<5  # 한글 PDF 보고서 생성
+markdown-it-py>=3,<5 # 보고서의 제목·목록·표 변환
+pypdf>=6,<8        # PDF 보고서의 내용·글꼴 검증 테스트
 
 # AI 리포트 생성용 (Anthropic Claude API). 키가 없으면 템플릿 fallback으로 동작하므로
 # 이 패키지가 없어도 엔진/템플릿 리포트는 동작한다.
